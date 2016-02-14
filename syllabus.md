@@ -2,7 +2,7 @@
 title: "Machine Learning in Econometrics"
 author: ""
 date: "13. Februar 2016"
-output: html_document
+output: github_document
 ---
 
 The goal of this course is to give an introduction to Machine Learning in Econometrics. In the first part, methods from Machine Learning are presented. In the second part, applications of those methods in Econometrics are discussed. Moreover, the statistical software package R is used for illustration of the methods.
