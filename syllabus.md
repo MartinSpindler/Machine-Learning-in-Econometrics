@@ -34,8 +34,9 @@ The goal of this course is to give an introduction to Machine Learning in Econom
 Part II. Estimation and Inference of Structural Parameters and Treatment Effects
 
 1. Partialling-out
-2. Inference in Lasso Regression on Selected Target Variables
+2. Inference on Selected Target Variables in Regressions in High-Dimensions
 3. IV Estimation in High-Dimensions
+4. The Orthogonality Principle
 
 
   
@@ -44,5 +45,9 @@ Part II. Estimation and Inference of Structural Parameters and Treatment Effects
 # Problem Sets
 
 * Introduction to R /RStudio and some important R Packages
+
+# Literature
+
+
 
 
