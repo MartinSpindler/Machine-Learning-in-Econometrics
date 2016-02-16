@@ -1,19 +1,21 @@
 ---
 title: "Problem Set 1"
-author: "Martn Spindler"
+author: "Martin Spindler"
 date: "15 Februar 2016"
 output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
 ```
 
-## R Markdown
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Installing R and RStudio
+* Install R, a free software environment for statistical computing and graphics from [CRAN](https://cran.r-project.org/), the Comprehensive R Archive Network. It is  recommended to install a precompiled binary distribution for your operating system.
+* Install RStudio’s IDE (Integrated Development Environment), a powerful user interface for R. RStudio Desktop is freely [available](https://www.rstudio.com).
 
-```{r cars}
-summary(cars)
-```
+
+
+
 

@@ -1,0 +1,54 @@
+---
+title: "Lecture 1 -- Introduction"
+author: "Martn Spindler"
+date: "15 Februar 2016"
+output:
+  ioslides_presentation: null
+  beamer_presentation: default
+  mathjax: local
+  self_contained: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Defintions | Taxonomy of Data Sets
+
+- Larger data become more and more available.
+- $n$: number of observations; $p$: number of variables
+- "Tall data": big $n$, small $p$  
+  computational demanding
+- "High-dimensional  data" or  "wide data": $n << p$ or small $n$, big $p$  
+  non-standard theory, computational demanding
+- "Big Data": big $n$, small / big $p$
+- Important concept: MapReduce and its software implementation [hadoop](https://www-01.ibm.com/software/data/infosphere/hadoop/mapreduce/), in particular for tall data
+
+## Defintions | Input and Output Variables
+- Inputs $X$: measured or present variables. Synonyms: predictors, features or independent variables
+- These inputs have some influence on one or more outputs.
+- Output variable $Y$ is also called response or dependent variable or outcome variables.
+- $$ Y = f(X) + \varepsilon $$
+- $f$ unknown function, $X=(X_1, \ldots, X_p)$ $p$ predictor variables, $\varepsilon$ random error term
+
+##  Defintions | Supervised vs Unsupervised Learning
+- Supervised Learning: Presence of the outcome variable to guide the learning process  
+  Goal: e.g. to use the inputs to predict the values of the outputs  
+  Methods: regression methods (linear, lasso, ridge, etc.), bagging, trees, random forests, ensemble learning, ...
+- Unsupervised Learning: only features are observed, no measurements of the outcome variable  
+  Goal: insights how the data are organized or clustered  
+  Methods: Association Rules, PCA, cluster analysis
+
+## Definitions | Regression vs Classification
+- Input variables $X$
+- Quantitative output $Y$: *regression*
+- Qualitative output (categorical / discrete) G: *classification*
+- Also input variables can also vary in measurement type.
+- Coding of qualitative variables: $0/1$, $-1/+1$, or in general case via dummy variables.
+
+## Problems / Challenges in High-Dimensions
+
+- Lost in the immensity of high-dimensional spaces 
+- Fluctuations cumulate. 
+- An accumulation of rare events may not be rare. 
+- Computational complexity

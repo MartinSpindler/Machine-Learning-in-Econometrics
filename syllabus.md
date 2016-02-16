@@ -1,14 +1,15 @@
 ---
 title: "Machine Learning in Econometrics"
-author: ""
+author: ''
 date: "13. Februar 2016"
+bibliography: bibliography.bib
 output: html_document
 ---
 
 The goal of this course is to give an introduction to Machine Learning in Econometrics. In the first part, methods from Machine Learning are presented. In the second part, applications of those methods in Econometrics are discussed. Moreover, the statistical software package R is used for illustration of the methods.
 
 # Lectures
-1.  Introduction
+1. [Introduction](Lecture_1.html)
   + Definitions
   + Basic Concepts
   + Challenges in High-Dimensions  
@@ -44,10 +45,13 @@ Part II. Estimation and Inference of Structural Parameters and Treatment Effects
 
 # Problem Sets
 
-* Introduction to R /RStudio and some important R Packages
+* [PS1](PS1.pdf) Introduction to R /RStudio and some important R Packages
 
 # Literature
 
-
+---
+nocite: | 
+  @UML, @ISL, @ESL
+...
 
 
