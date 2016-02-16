@@ -51,7 +51,7 @@ Part II. Estimation and Inference of Structural Parameters and Treatment Effects
 
 ---
 nocite: | 
-  @UML, @ISL, @ESL
+  @UML, @ISL, @ESL, @hdm
 ...
 
 
