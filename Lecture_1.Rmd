@@ -1,7 +1,7 @@
 ---
 title: "Lecture 1 -- Introduction"
 author: "Martin Spindler"
-date: "15. Februar 2016"
+date: "`r format(Sys.Date())`"
 output:
   ioslides_presentation: null
   beamer_presentation: default
@@ -76,6 +76,33 @@ $$ \mathbb{E} (y_0 - \hat{f}(x_0))^2 = \mathbb{Var}(\hat{f}(x_0)) + [Bias(\hat{f
 - Bias: error due to approximation the real relationship by a simpler model
 - "Bias-Variance Trade-off"
 
+## Basic Concepts | The Bias-Variance Trade-off III (Illustration)
+
+```{r, include=TRUE}
+set.seed(12345)
+n <- 25
+X <- rnorm(n)
+f <- X*1
+y <- f + rnorm(n)
+reg2 <- lm(y~ X + I(X^2))
+reg3 <- lm(y~ X + I(X^2) + I(X^3))
+reg4 <- lm(y~ X + I(X^2) + I(X^3) + I(X^4))
+i <- order(X)
+```
+```{r}
+plot(X,f, type="l")
+points(X,y)
+abline(lm(y ~ X), col="red")
+points(X[i], predict(reg2)[i], type="l", col="blue")
+points(X[i], predict(reg3)[i], type="l", col="green")
+points(X[i], predict(reg4)[i], type="l", col="yellow")
+legend("topleft", c("True line", "linear fit", "quadratic fit", "third order polynomial", "fourth order polynomial"), 
+ lty=c(1,1,1,1,1), lwd=rep(1,5),col=c("black","red", "blue", "green", "yellow"), cex=0.65)
+```
+
+
+
+
 ## Problems / Challenges in High-Dimensions
 
 - Lost in the immensity of high-dimensional spaces 
@@ -112,7 +139,7 @@ How many points are needed in order to fill the hypercube $[0,1]^p$ in such a wa
 
 p | $20$| $30$| $50$| $100$|$150$|$200$
 --|-----|-----|------|------|-----|----------------------------------
-n |$39$| $45630$| $5.7*10^12$|$42*10^39$| $1.28*10^72$ |Inf
+n |$39$| $45630$| $5.7*10^{12}$|$42*10^{39}$| $1.28*10^{72}$ |Inf
 
 ## Fluctuations accumulate.
 In the linear regression model $Y = X \beta + \varepsilon$ for the OLS estimate $\hat{\beta}=(X^TX)^{-1}X^TY$ we have
@@ -131,7 +158,7 @@ $$ \mathbb{P}(X \in  B_{p,\delta}) =  \mathbb{P}(e^{-||X||^2/2}\geq \delta) \leq
  = \frac{1}{\delta 2^{p/2}}$$
 ```{r, include=FALSE}
 delta = 0.001
-p = 20:100
+p = 30:100
 Prob = 1/(delta*2^(p/2))
 #Prob = Prob/Prob[1]
 ```

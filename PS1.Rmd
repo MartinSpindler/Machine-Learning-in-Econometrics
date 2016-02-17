@@ -1,7 +1,7 @@
 ---
 title: "Problem Set 1"
-author: "Martin Spindler"
-date: "15 Februar 2016"
+author: ""
+date: "`r format(Sys.Date())`"
 output: pdf_document
 ---
 
@@ -14,6 +14,83 @@ knitr::opts_chunk$set(error = TRUE)
 ## Installing R and RStudio
 * Install R, a free software environment for statistical computing and graphics from [CRAN](https://cran.r-project.org/), the Comprehensive R Archive Network. It is  recommended to install a precompiled binary distribution for your operating system.
 * Install RStudio’s IDE (Integrated Development Environment), a powerful user interface for R. RStudio Desktop is freely [available](https://www.rstudio.com).
+
+
+## Installing R packages
+
+* A strength of R is that many add on packages are available which extend the capability of R. The "official" packages are hosted at CRAN and can be installed in R/RStudio with command \texttt{install.packages()}. The package \texttt{hdm} which we will use later in the course can be installed by
+
+```{r, eval=FALSE}
+install.packages("hdm")
+```
+
+* Many packages are collected in so-called [task views](https://cran.r-project.org/web/views/). For Machine Learning a good starting point is [here](https://cran.r-project.org/web/views/MachineLearning.html).
+
+* Often the most current version of packages, but also some packages which are not hosted at CRAN, are hosted at file repositories like R Forge and Github. E.g., the most current version of \texttt{hdm} can be installed from R-Forge by specifying the corresponding repository:
+
+```{r, eval=FALSE}
+install.packages("hdm", repos="http://R-Forge.R-project.org")
+```
+
+* After installing a package it can be made availabe in the current R seesion with the command
+```{r, eval=FALSE}
+library(hdm)
+```
+## Packages for Machine Learning
+
+One of the strength of R is that many useful packages for Machine Learning are available. Some of the most important ones which will also useful during the course of this course are given in the table.
+
+package | description |
+--------|-------------------------------------------|
+mlr | interface to  a large number of classification and regression techniques|
+rpart, tree, party |  tree-structured models for regression, classification and survival analysis|
+randomForest | random forests|
+nnet | single-hidden-layer neural network|
+mboost, gbm | boosting methods|
+hdm, lars, glmnet | lasso implementations|
+
+## Finding help in R and on the web
+
+* R has a comprehensive built-in help system. E.g. to get help for the function \texttt{lm} which conducts linear regression, you can use any of the following at the program's command prompt :
+
+```{r, eval=FALSE}
+help.start()       # general help
+help(lm)           # help about function lm
+?lm                # same result
+apropos("lm")      # list all functions containing string lm
+??lm               # extensive search on all documents containing the string "lm"
+example(lm)        # show an example of function lm
+RSiteSearch("lm") # search for foo in help manuals and archived mailing lists
+
+```
+
+Moreover, many packages contain introductions called "vignettes".
+
+```{r, eval=FALSE}
+# get vignettes on using installed packages
+vignette()      # show available vingettes
+vignette(package="XYZ") # show vignettes in the package XYZ
+```
+
+For information on help search in are can be found on this [stackoverflow question](http://stackoverflow.com/questions/15289995/how-to-get-help-in-r)
+
+* Exercise:
+a. Install and load the package "hdm".
+b. Which function in this package conducts "lasso" estimation?
+c. How is this function used?
+d. Find the vignette of the package!
+
+* R is shipped with different manuals where "An Introduction to R" is a good starting point to learn more about R.
+Moreover, good sources for help are [stackoverflow](http://stackoverflow.com/questions/tagged/r) and the archive of the R-help list where solutions to many problems can be found.
+
+## Course Material
+
+Material for this course is hosted at 
+https://github.com/MartinSpindler/Machine-Learning-in-Econometrics
+
+
+
+
 
 
 

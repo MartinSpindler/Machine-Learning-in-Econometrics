@@ -1,7 +1,7 @@
 ---
 title: "Machine Learning in Econometrics"
-author: ''
-date: "13. Februar 2016"
+author: ""
+date: "February 2016"
 bibliography: bibliography.bib
 output: html_document
 ---
