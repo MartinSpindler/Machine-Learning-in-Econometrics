@@ -1,9 +1,9 @@
 ---
 title: "Machine Learning in Econometrics"
-author: ""
+author: ''
 date: "February 2016"
+output: pdf_document
 bibliography: bibliography.bib
-output: html_document
 ---
 
 The goal of this course is to give an introduction to Machine Learning in Econometrics. In the first part, methods from Machine Learning are presented. In the second part, applications of those methods in Econometrics are discussed. Moreover, the statistical software package R is used for illustration of the methods.
@@ -16,10 +16,10 @@ The goal of this course is to give an introduction to Machine Learning in Econom
     
   Part I. How to make predictions?  
     
-1. Linear Regression and Extensions
-  + Recap: Linear Regression
-  + Regression Splines
-  + Smoothing Splines
+1. [Linear Regression and Extensions](Lecture_2.html)
+  + [Recap: Linear Regression](Lecture_2.html)
+  + [Regression Splines](Lecture_3.html)
+  + [Smoothing Splines](Lecture_3.html)
 2. Lasso Regression
   + Basic Principle
   + Some Results

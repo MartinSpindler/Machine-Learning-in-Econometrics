@@ -1,0 +1,119 @@
+---
+title: "Lecture 3 -- Linear Regression and Extensions"
+author: "Martin Spindler"
+date: "`r format(Sys.Date())`"
+output:
+  ioslides_presentation: null
+  beamer_presentation: default
+  mathjax: local
+  self_contained: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Extensions
+- Polynomial Regression
+- Step Functions
+- Basis Functions
+- Regression Splines
+- Smoothing Splines
+
+## Regression Splines
+
+* Polynomial regressions often leads to rough and instable estimates.
+* Solution: Fitting seperate low-degree polynomials over different regions (and make them smooth)
+* Construction of splines:
+  - Partition x-axis into different smaller sub-intervals and estimate a seperate polynomial for each interval.
+  - Additionally, it is required that the combined function is smooth (e.g. continuosly differentiable) at the boundary points (knots).
+  
+## Regression Splines | Defintion
+
+Let $a=c_1 < c_2 < \ldots < c_K=b$ be a partition of the interval $[a,b]$. A function $s: [a,b] \rightarrow \mathbb{R}$ is called a polynomial spline of degree $l$ if  
+
+1. $s(z)$ is a polynomial of degree $l$ for $z \in [c_j, c_{j+1}), 1 \leq j < m.$
+2. $s(z)$ is $(l-1)$-times continuously differentiable.
+
+$c_1, \ldots, c_K$ are called knotes of the splines and $\Omega=\{ c_1,\ldots, c_k\}$ knot set.
+
+## Regression Splines
+
+It can be shown that regression splines form a vector space of dimension of dimension $K+l-1$.
+
+Hence every regression spline can be represented as the sum of $K+l-1$ basis functions:
+
+$$ s(z) = \beta_0 B_0(z) + \ldots + \beta_{k+l-2} B_{K+l-2}(z).$$
+
+Basis functions: truncated power series basis, B-spline basis (numerical more stable)  
+Truncated power series:  
+$$s(z) =  \sum_{j=0}^l \beta_j z^j + \sum_{j=2}^{K-1} \beta_{l+j-1} (z-c_j)^l_+$$
+with $(z-c_j)^l_+ = \max(0, (z-c_j))^l$.  
+
+## Regression Splines | Example Basis Functions
+We consider the interval $[0,1]$ and knots $0<0.25<0.5<0.75<1$.  
+
+For a quadratic spline and 5 knots, the number of basis functions is given by $2+5-1=6$.
+
+
+## Regression Splines | Example Basis Functions
+
+```{r}
+par(mfrow=c(3,2))
+plot(NULL, xlim=c(0,1), ylim=c(0,2), xlab="", ylab="", main="Spline of degree 2, B_0")
+abline(h=1)
+curve(x^1, from=0, to=1,  xlab="", ylab="", main="Spline of degree 2, B_1")
+curve(x^2, from=0, to=1,  xlab="", ylab="", main="Spline of degree 2, B_2")
+f3 <- function(x) ifelse(x<0.25, 0, (x-0.25)^2)
+curve(f3, from=0, to=1,  xlab="", ylab="", main="Spline of degree 2, B_3")
+f4 <- function(x) ifelse(x<0.5, 0, (x-0.5)^2)
+curve(f3, from=0, to=1,  xlab="", ylab="", main="Spline of degree 2, B_4")
+f5 <- function(x) ifelse(x<0.75, 0, (x-0.75)^2)
+curve(f3, from=0, to=1,  xlab="", ylab="", main="Spline of degree 2, B_5")
+```
+
+## Regression Splines
+How to choose the number and location of knots?
+
+* Equi-distant knotes
+* Choice according to quantiles of the x-variable 
+
+## Regression Splines | Example
+```{r, include=FALSE}
+library(ISLR)
+attach(Wage)
+agelims = range(age)
+age.grid = seq(from=agelims[1], to=agelims[2])
+library(splines)
+fit = lm(wage ~ bs(age, knots=c(25,40,60)), data=Wage)
+pred = predict(fit, newdata=list(age=age.grid), se=T)
+# alternative way by specifying degrees of freedom
+# fit = lm(wage ~ bs(age, df=6, data=Wage)
+# attr(bs(age=df=6), "knots")
+```
+```{r}
+plot(age, wage, col="gray")
+lines(age.grid, pred$fit, lwd=2)
+lines(age.grid, pred$fit + 2*pred$se, lty="dashed")
+lines(age.grid, pred$fit - 2*pred$se, lty="dashed")
+```
+
+## Natural Splines
+
+* Problem: Regression splines tend to display erratic behvior at the boundaries of the domain leading to high variance.
+* Solution: additional constraints at the boundary (left of the leftmost knot and right of the most rightmost knot)
+* Defintion **Natural Spline**  
+A natural spline of degree $l$ is a regression spline of degree $l$ with the additional constraint that  
+it is a polynomial of degree $(k-1)/2$ on $(-\infty, c_0]$ and $[c_K, + \infty)$.
+* Most popular natural splines are cubic which are linear beyond the boundaries.
+* Modifications of the truncated power basis and B-spline basis for natural splines (here dimension $K$!)
+
+## Smoothing Splines
+
+* Optimization problem: Among all functions $f(x)$ with two continuous derivatives, minimize:
+$$ RSS(f, \lambda) = \sum_{i=1}^n (y_i -f(x_i))^2 + \lambda \int (f''(t))^2dt $$
+* $\lambda$ is called *smoothing parameter* (interpretation?)
+* It can be shown that the solution of the opimization problem is unique and a natural cubic spline with knots at the unique values of the $x_i, i=1,\ldots,n$.
+* Here: no problem how to choose the knots (as in the regression spline case)
+* Intution: Overparametrization (because of $n$ knots), but penalization
+
