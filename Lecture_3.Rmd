@@ -117,3 +117,29 @@ $$ RSS(f, \lambda) = \sum_{i=1}^n (y_i -f(x_i))^2 + \lambda \int (f''(t))^2dt $$
 * Here: no problem how to choose the knots (as in the regression spline case)
 * Intution: Overparametrization (because of $n$ knots), but penalization
 
+## Snoothing Splines
+
+Since the solution is a natural spline, we can write it as
+
+$$ f(x) = \sum_{j=1}^n b_j(x) \beta_j $$
+
+with $b_1(\cdot), \ldots, b_n(\cdot)$ an $n$ dimensional set of basis functions for representing the family of natural splines.
+
+## Snoothing Splines
+
+Then the criterion reduces to
+
+$$ RSS(\beta, \lambda) = (y-B \beta)^T (y-B \beta) + \lambda \beta^T \Omega_n \beta $$
+
+where $B_{ij}=b_j(x_i)$ and $(\Omega_n)_{jk}=\int b_j''(d) b_k''(t)dt.$
+
+The solution is given by
+
+$$ \hat{\beta}=(B^TB + \lambda \Omega_n)^{-1}B^T y.$$
+(generalized Ridge regression).
+
+## Snoothing Splines
+The fitted  smoothing spline is given by
+
+$$\hat{f}(x) = \sum_{j=1}^n b_j(x) \hat{\beta_j}$$
+

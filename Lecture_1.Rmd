@@ -1,10 +1,10 @@
 ---
 title: "Lecture 1 -- Introduction"
 author: "Martin Spindler"
-date: "`r format(Sys.Date())`"
+date: '`r format(Sys.Date())`'
 output:
-  ioslides_presentation: null
   beamer_presentation: default
+  ioslides_presentation: null
   mathjax: local
   self_contained: no
 ---
@@ -172,7 +172,7 @@ Suppose an error $\varepsilon$ is Gaussian distributed with $\mathcal{N}(0,1)$. 
 
 When we observe $p$ noise variables $\varepsilon_1,\ldots,\varepsilon_p$ which are i.i.d. and standard normal, we have
 
-$$ \mathbb{P}(\max_{j=1,\ldots,p} |\varepsilon_j| \geq x) = 1 - (1- \mathbb{P}(|\varepsilon_1| \geq x))^p ~ \mathbb{P}(|\varepsilon_1| \geq x).$$
+$$ \mathbb{P}(\max_{j=1,\ldots,p} |\varepsilon_j| \geq x) = 1 - (1- \mathbb{P}(|\varepsilon_1| \geq x))^p \approx p \mathbb{P}(|\varepsilon_1| \geq x).$$
 
 This means that if we want to bound the max of the absolute values wiht probability $1-\alpha$, then we can only guarantee that the maximum is smaller than $(2\log(p/\alpha))^{1/2}$.
 

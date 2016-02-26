@@ -53,7 +53,7 @@ $$ \mathbb{Var}(\hat{\beta})= (X'X)^{-1} \sigma^2.$$
 
 Asymptotically, the ols estimate is normal distributed:
 
-$$ $\hat{\beta} \sim N(\beta, (X'X)^{-1} \sigma^2).$$
+$$ \hat{\beta} \sim N(\beta, (X'X)^{-1} \sigma^2).$$
 
 This can be used for testing hypotheses and construction of confidence intervals.
 
@@ -75,87 +75,90 @@ Remark: In the high-dimensional-setting, i.e. $p >> n$ the Gram Matrix is rank d
 
 ## Extensions | Remarks
 * Although the linear regression model looks quite simple, it can be extended / modified to model complex relations.
-* For the extensions we consider without loss of generality univariate regressions: $y_i=\beta_0 + \beta_1 x_i + \varepsilon_i$
+* For the extensions we consider without loss of generality univariate regressions:
+
+$$ y_i=\beta_0 + \beta_1 x_i + \varepsilon_i$$
 
 ## Extensions | Polynomial Regression
 
 To make the linear specification more flexible, we might include higher-order polynomials:
+  
+  $$ y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \ldots \beta_p x_i^p + \varepsilon_i $$
+    
+  * Estimation by ols
+  * Quite flexibel, but usually p=3 or p=4
+  * Higher order polynomials ($p \geqq 5 $) might lead to strange fits (overfitting), especially at the boundary.
+  
+  ## Extensions | Polynomial Regression - Example
+  ```{r, include=FALSE}
+  library(ISLR)
+  attach(Wage)
+  # Fourth orger polynomial
+  fit4 = lm(wage ~ poly(age, 4, raw=T), data=Wage)
+  # fit = lm(wage ~ age + I(age^2) + I(age^3) + I(age^4), data=Wage)
+  agelims = range(age)
+  age.grid = seq(from=agelims[1], to=agelims[2])
+  preds4 = predict(fit4, newdata=list(age=age.grid), se=TRUE)
+  se.bands4 = cbind(preds4$fit + 2*preds4$se.fit, preds4$fit - 2*preds4$se.fit) #95% confidence intervall
+  ```
+  
+  
+  ```{r, include=FALSE}
+  # calculation higher order polynomials
+  fit3 = lm(wage ~ poly(age, 3, raw=T), data=Wage)
+  preds3 = predict(fit3, newdata=list(age=age.grid), se=TRUE)
+  fit5 = lm(wage ~ poly(age, 5, raw=T), data=Wage)
+  preds5 = predict(fit5, newdata=list(age=age.grid), se=TRUE)
+  ```
+  
+  ```{r}
+  par(mfrow=c(1,2), mar=c(4.5,4.5,1,1), oma=c(0,0,4,0))
+  plot(age, wage, xlim=agelims, cex=.5, col="darkgrey")
+  title("Polynomial of order 4", outer=F)
+  lines(age.grid, preds4$fit, lwd=2, col="blue")
+  matlines(age.grid, se.bands4, lwd=1, col="blue", lty=3)
+  plot(age, wage, xlim=agelims, cex=.5, col="darkgrey")
+  lines(age.grid, preds4$fit, lwd=2, col="blue")
+  lines(age.grid, preds5$fit, lwd=2, col="red")
+  lines(age.grid, preds3$fit, lwd=2, col="green")
+  title("Different higher order polynomials")
+  legend("bottomright", c("Third order", "Fourth order", "Fifth order"), 
+         lty=c(1,1,1), lwd=rep(2,3),col=c("green","blue", "red"), cex=0.65)
+  ```
 
-$$ y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \ldots \beta_p x_i^p + \varepsilon_i $$
-
-* Estimation by ols
-* Quite flexibel, but usually $p=3$ oder $p=4$ 
-* Higher order polynomials ($p \geqq 5 $) might lead to strange fits (overfitting), especially at the boundary.
-
-## Extensions | Polynomial Regression - Example
-```{r, include=FALSE}
-library(ISLR)
-attach(Wage)
-# Fourth orger polynomial
-fit4 = lm(wage ~ poly(age, 4, raw=T), data=Wage)
-# fit = lm(wage ~ age + I(age^2) + I(age^3) + I(age^4), data=Wage)
-agelims = range(age)
-age.grid = seq(from=agelims[1], to=agelims[2])
-preds4 = predict(fit4, newdata=list(age=age.grid), se=TRUE)
-se.bands4 = cbind(preds4$fit + 2*preds4$se.fit, preds4$fit - 2*preds4$se.fit) #95% confidence intervall
-```
-
-
-```{r, include=FALSE}
-# calculation higher order polynomials
-fit3 = lm(wage ~ poly(age, 3, raw=T), data=Wage)
-preds3 = predict(fit3, newdata=list(age=age.grid), se=TRUE)
-fit5 = lm(wage ~ poly(age, 5, raw=T), data=Wage)
-preds5 = predict(fit5, newdata=list(age=age.grid), se=TRUE)
-```
-
-```{r}
-par(mfrow=c(1,2), mar=c(4.5,4.5,1,1), oma=c(0,0,4,0))
-plot(age, wage, xlim=agelims, cex=.5, col="darkgrey")
-title("Polynomial of order 4", outer=F)
-lines(age.grid, preds4$fit, lwd=2, col="blue")
-matlines(age.grid, se.bands4, lwd=1, col="blue", lty=3)
-plot(age, wage, xlim=agelims, cex=.5, col="darkgrey")
-lines(age.grid, preds4$fit, lwd=2, col="blue")
-lines(age.grid, preds5$fit, lwd=2, col="red")
-lines(age.grid, preds3$fit, lwd=2, col="green")
-title("Different higher order polynomials")
-legend("bottomright", c("Third order", "Fourth order", "Fifth order"), 
- lty=c(1,1,1), lwd=rep(2,3),col=c("green","blue", "red"), cex=0.65)
-```
 
 ## Extensions | Step Functions
-
+  
 * Defintion: Step functions are functions which are constant on each part of a partition of the domain.
 * Univariate Regression: choosing $K$ cutpoints $c_1, \ldots, c_K$ and defining new auxiliary variables:  
-$C_0(x)= 1(x < c_1)$, $C_1(x)=1(c_1 \leq x < c_2)$, ..., $C_K(x)=1(c_K \leq x)$
+    $C_0(x)= 1(x < c_1)$, $C_1(x)=1(c_1 \leq x < c_2)$, $\ldots$, $C_K(x)=1(c_K \leq x)$
 * $1(\cdot)$ is the so-called indicator function which is $1$ is the condition is true and $0$ otherwise.
 * This gives us the following regression:
-$$ y_i = \beta_0 = \beta_1 *C_1(x_i) + \ldots + \beta_K *C_K(x_i) + \varepsilon_i $$
-
+    $$ y_i = \beta_0 = \beta_1 *C_1(x_i) + \ldots + \beta_K *C_K(x_i) + \varepsilon_i $$
+    
 ## Extensions | Step Functions
-
+    
 * Note: $C_0(x) + \ldots + C_K(x) = 1$ and hence we drop $C_0=(\cdot)$ to avoid multicollinearity.
 * Interpretation $\beta_0$
 * Example: wage regression
-
+  
 ## Extensions | Step Functions
-```{r, include=FALSE}
-Wage$agegroup<-cut(Wage$age, c(18,25,35,45,55,65,80))
-fitgroup = lm(wage ~ agegroup, data=Wage)
-predsgroup = predict(fitgroup, newdata=list(agegroup=cut(18:80, c(18,25,35,45,55,65,80))), se=TRUE)
-se.bandsgr = cbind(predsgroup$fit + 2*predsgroup$se.fit, predsgroup$fit - 2*predsgroup$se.fit) #95% confidence intervall
-```
-
-```{r}
-plot(age, wage, xlim=agelims, cex=.5, col="darkgrey")
-title("Regression with step functions", outer=T)
-lines(18:80, predsgroup$fit, lwd=2, col="blue")
-matlines(age.grid, se.bandsgr, lwd=1, col="blue", lty=3)
-```
-
+  ```{r, include=FALSE}
+  Wage$agegroup<-cut(Wage$age, c(18,25,35,45,55,65,80))
+  fitgroup = lm(wage ~ agegroup, data=Wage)
+  predsgroup = predict(fitgroup, newdata=list(agegroup=cut(18:80, c(18,25,35,45,55,65,80))), se=TRUE)
+  se.bandsgr = cbind(predsgroup$fit + 2*predsgroup$se.fit, predsgroup$fit - 2*predsgroup$se.fit) #95% confidence intervall
+  ```
+  
+  ```{r}
+  plot(age, wage, xlim=agelims, cex=.5, col="darkgrey")
+  title("Regression with step functions", outer=T)
+  lines(18:80, predsgroup$fit, lwd=2, col="blue")
+  matlines(age.grid, se.bandsgr, lwd=1, col="blue", lty=3)
+  ```
+  
 ## Extension | Basis Functions
-
+  
 * Idea: family of functions or transformations that can be applied to a variable: $b_1(x), \ldots, b_K(x)$ (basis functions)
 * Regression: $$y_i = \beta_0 + \beta_1 b_1(x_i) + \ldots + \beta_K b_K(x_i) + \varepsilon_i $$
 * Examples
