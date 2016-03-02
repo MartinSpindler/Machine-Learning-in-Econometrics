@@ -1,10 +1,10 @@
 ---
 title: "Lecture 3 -- Linear Regression and Extensions"
 author: "Martin Spindler"
-date: "`r format(Sys.Date())`"
+date: '`r format(Sys.Date())`'
 output:
-  ioslides_presentation: null
   beamer_presentation: default
+  ioslides_presentation: null
   mathjax: local
   self_contained: no
 ---
