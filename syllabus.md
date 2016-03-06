@@ -20,17 +20,19 @@ The goal of this course is to give an introduction to Machine Learning in Econom
   + [Recap: Linear Regression](Lecture_2.html)
   + [Regression Splines](Lecture_3.html)
   + [Smoothing Splines](Lecture_3.html)
-2. Lasso Regression
+2. [Ridge Regression](Lecture_4.html)
+3. Lasso Regression
   + Basic Principle
   + Some Results
   + Extensions
-3. Boosting
+4. Boosting
   + Basic Idea
   + $L_2$Boosting for Regression
-4. Of Trees and Forests
+5. Of Trees and Forests
   + Regression Trees
   + Random Forests
   + Bagging
+6. Model Selection: How to choose between different models?
 
 Part II. Estimation and Inference of Structural Parameters and Treatment Effects
 
@@ -46,6 +48,7 @@ Part II. Estimation and Inference of Structural Parameters and Treatment Effects
 # Problem Sets
 
 * [PS1](PS1.pdf) Introduction to R /RStudio and some important R Packages
+* [Ps2](PS2.pdf) Linear Regression and Extensions
 
 # Literature
 

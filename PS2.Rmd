@@ -1,0 +1,131 @@
+---
+title: "Problem Set 2 -- Linear Regression and Extensions"
+author: ''
+date: '`r format(Sys.Date())`'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
+```
+
+
+## Loading and Exploring the Data Set
+For this problem set we will analyze the data set *Boston* which is contained in the library *MASS*. This data set records the median house value (*medv*) for $506$ neighbourhoods around Boston. The goal is to predict the variable *medv* using $13$ predictors.
+
+* Load the data set.
+* Make yourself familiar with the data.  Hint: *str()*, *names()*, *help()*
+* Generate Descriptive statistics. Hint: *summary*, *mean*, *sd*, *var*, *min*, *max*, *median*, *range*,  *quantile*, *fivenum*
+* Plot the data, especially the outcome variable *medv* and the variable *lstat*. Hint: *plot*, *hist*, *boxplot*
+
+```{r, include=TRUE}
+options(warn=1)
+library(MASS)
+data(Boston)
+?Boston
+attach(Boston)
+summary(medv)
+summary(lstat)
+```
+
+
+## Univariate Linear Regression
+
+* Analyse the relation between *medv* and *lstat* with a linear regression. Hint: *lm()*
+* Interpret the results. Hint: *summary*
+* Plot the regression line in a graph with the original data points.
+* What is the predicted value of *medv* for a region with a *lstat* of $32$?
+```{r}
+reg1 = lm(medv ~ lstat, data=Boston)
+summary(reg1)
+#plot(reg1)
+plot(medv ~ lstat, data=Boston)
+abline(reg1, col="red")
+predict(reg1, newdata = list(lstat=32), interval="confidence")
+```
+
+## Multivariate Linear Regression
+* Fit now a multivariate regression.
+* Interpret the results, in particular with a focus on the variable *lstat*.
+* Fit a more complex model, e.g. considering interaction effects and higher order polyomials.
+```{r}
+reg2 = lm(medv ~ ., data=Boston)
+summary(reg2)
+#plot(reg2)
+reg3 = lm(medv ~ poly(lstat,3)+ crim + zn + crim:zn+ (chas + nox + rm)^2, data=Boston)
+coef(reg3)
+```
+
+## Regression Splines
+Now we consider again the relation between *lstat* and *medv*.
+
+* Fit a cubic regression spline to the data! Hint: library *splines* and function *bs()*
+* Plot the fitted line!
+```{r}
+library(splines)
+par(mfrow=c(1,1))
+fit = lm(medv ~ bs(lstat, knots=c(10,20,30)), data=Boston)
+lstat.grid <- seq(from=1.8, to=37.9, by=0.1)
+pred = predict(fit, newdata=list(lstat=lstat.grid), se=TRUE)
+plot(Boston$lstat, Boston$medv, col="gray")
+lines(lstat.grid, pred$fit, lwd=2)
+lines(lstat.grid, pred$fit + 2*pred$se, lwd="dashed")
+lines(lstat.grid, pred$fit - 2*pred$se, lwd="dashed")
+```
+* Experiment with different spline specifications! Hint: options *knots* and *df*
+```{r, include=F}
+fit2 = lm(medv ~ bs(lstat, df=6), data=Boston)
+attr(bs(lstat, df=6), "knots")
+pred2 = predict(fit2, newdata=list(lstat=lstat.grid), se=TRUE)
+plot(Boston$lstat, Boston$medv, col="gray")
+lines(lstat.grid, pred2$fit, lwd=2)
+lines(lstat.grid, pred2$fit + 2*pred2$se, lwd="dashed")
+lines(lstat.grid, pred2$fit - 2*pred2$se, lwd="dashed")
+```
+
+```{r}
+fit2 = lm(medv ~ bs(lstat, df=20), data=Boston)
+attr(bs(lstat, df=20), "knots")
+pred2 = predict(fit2, newdata=list(lstat=lstat.grid), se=TRUE)
+plot(Boston$lstat, Boston$medv, col="gray")
+lines(lstat.grid, pred2$fit, lwd=2)
+lines(lstat.grid, pred2$fit + 2*pred2$se, lwd="dashed")
+lines(lstat.grid, pred2$fit - 2*pred2$se, lwd="dashed")
+```
+
+* Fit a natural spline. Hint: *ns()*
+```{r}
+fit = lm(medv ~ ns(lstat, knots=c(10,20,30)), data=Boston)
+lstat.grid <- seq(from=1.8, to=37.9, by=0.1)
+pred = predict(fit, newdata=list(lstat=lstat.grid), se=TRUE)
+plot(Boston$lstat, Boston$medv, col="gray")
+lines(lstat.grid, pred$fit, lwd=2)
+lines(lstat.grid, pred$fit + 2*pred$se, lwd="dashed")
+lines(lstat.grid, pred$fit - 2*pred$se, lwd="dashed")
+```
+
+* Compare the different specifications!
+
+## Smoothing Splines
+
+* Fit and plot a smoothing spline to the data! Hint: *smooth.spline()*
+```{r}
+plot(lstat, medv, cex=.5, col="darkgrey")
+title("Smoothing Splines")
+fit = smooth.spline(lstat, medv, df=16)
+fit2 = smooth.spline(lstat, medv, cv=FALSE) # generalized CV
+fit2$df
+lines(fit, col="red", lwd=2)
+lines(fit2, col="blue", lwd=2)
+legend("topright", legend=c("16 df", "6.8 df"), col=c("red", "blue"), lty=1, lwd=2, cex=.8)
+```
+
+
+
+
+
+
+
+
+
