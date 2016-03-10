@@ -30,10 +30,11 @@ Key assumption: **sparsity**
 
 The number of variables $p$ can grow with the sample size and even be larger $n$, but the number of non-zero coefficients $s$ is required to be smaller than $n$ (but may also grow with the sample size).
 
-Notation: 
+Notation:
+
 * $\beta^0$ true vector with components $\beta_j^0, j=1,\ldots,p$  
-* $S_0=\{j: \beta^0_j \neq 0, j=1,\ldots,p\}$, $s=|S|$  
-* $\hat{S}=\{j: \hat{\beta}_j \neq 0, j=1,\ldots,p\}$
+* $S_0=\{j: \beta^0_j \neq 0, j=1,\ldots,p\}$, $s=|S|$   
+* $\hat{S}=\{j: \hat{\beta}_j \neq 0, j=1,\ldots,p\}$  
 
 
 ## A glimpse on the theory
@@ -88,7 +89,7 @@ $$ \mathbb{P}[S_0 = \hat{S}] \rightarrow 1$$
 
 * $\hat{\beta}_{adapt}(\lambda)=\arg \min_{\beta} \left( ||Y-X\beta||^2_2/n + \lambda \sum_{j=1}^p \frac{|\beta_j|}{|\hat{\beta}_{init,j}|} \right)$  
 	where $\hat{\beta}_{init}$ is an initial estimator (e.g. Lasso from an initial stage)
-* Intuition: $\hat{\beta}_{init,j}=0 \Rightarrow \hat{\beta}_{adapt,j}=0$
+* Intuition: $\hat{\beta}_{init,j}=0$ leads to $\hat{\beta}_{adapt,j}=0$  
 	$|\hat{\beta}_{init,j}|$ large $\Rightarrow$ small penalty
 * Goal: Reduction of bias of Lasso
 

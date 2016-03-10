@@ -3,11 +3,11 @@ title: "Lecture 4 -- Ridge and Lasso Regression"
 author: "Martin Spindler"
 date: '`r format(Sys.Date())`'
 output:
-  beamer_presentation: default
   ioslides_presentation: null
+  beamer_presentation: default
+  keep_tex: yes
   mathjax: local
   self_contained: no
-  keep_tex: true
 ---
 
 ## Ridge Regression

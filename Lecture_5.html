@@ -10,7 +10,7 @@
 
 
 
-  <meta name="date" content="2016-03-08" />
+  <meta name="date" content="2016-03-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,7 +89,7 @@
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2016-03-08</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2016-03-10</p>
           </hgroup>
   </slide>
 
@@ -111,7 +111,13 @@
 
 <p>The number of variables \(p\) can grow with the sample size and even be larger \(n\), but the number of non-zero coefficients \(s\) is required to be smaller than \(n\) (but may also grow with the sample size).</p>
 
-<p>Notation:* \(\beta^0\) true vector with components \(\beta_j^0, j=1,\ldots,p\)<br/>* \(S_0=\{j: \beta^0_j \neq 0, j=1,\ldots,p\}\), \(s=|S|\)<br/>* \(\hat{S}=\{j: \hat{\beta}_j \neq 0, j=1,\ldots,p\}\)</p>
+<p>Notation:</p>
+
+<ul>
+<li>\(\beta^0\) true vector with components \(\beta_j^0, j=1,\ldots,p\)<br/></li>
+<li>\(S_0=\{j: \beta^0_j \neq 0, j=1,\ldots,p\}\), \(s=|S|\)<br/></li>
+<li>\(\hat{S}=\{j: \hat{\beta}_j \neq 0, j=1,\ldots,p\}\)</li>
+</ul>
 
 </article></slide><slide class=''><hgroup><h2>A glimpse on the theory</h2></hgroup><article  id="a-glimpse-on-the-theory">
 
@@ -175,7 +181,7 @@
 
 <ul>
 <li>\(\hat{\beta}_{adapt}(\lambda)=\arg \min_{\beta} \left( ||Y-X\beta||^2_2/n + \lambda \sum_{j=1}^p \frac{|\beta_j|}{|\hat{\beta}_{init,j}|} \right)\)<br/>where \(\hat{\beta}_{init}\) is an initial estimator (e.g. Lasso from an initial stage)</li>
-<li>Intuition: \(\hat{\beta}_{init,j}=0 \Rightarrow \hat{\beta}_{adapt,j}=0\)\(|\hat{\beta}_{init,j}|\) large \(\Rightarrow\) small penalty</li>
+<li>Intuition: \(\hat{\beta}_{init,j}=0\) leads to \(\hat{\beta}_{adapt,j}=0\)<br/>\(|\hat{\beta}_{init,j}|\) large \(\Rightarrow\) small penalty</li>
 <li>Goal: Reduction of bias of Lasso</li>
 </ul>
 

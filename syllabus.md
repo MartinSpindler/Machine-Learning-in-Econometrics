@@ -26,9 +26,9 @@ The goal of this course is to give an introduction to Machine Learning in Econom
   + [Some Results](Lecture_5.html)
   + [Extensions](Lecture_5.html)
 4. Of Trees and Forests
-  + Regression Trees
-  + Random Forests
-  + Bagging
+  + [Regression Trees](Lecture_6.html)
+  + [Bagging](Lecture_6.html)
+  + [Random Forests](Lecture_6.html)
 5. Boosting
   + Basic Idea
   + $L_2$Boosting for Regression

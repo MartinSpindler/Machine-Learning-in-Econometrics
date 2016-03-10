@@ -10,7 +10,7 @@
 
 
 
-  <meta name="date" content="2016-03-06" />
+  <meta name="date" content="2016-03-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,7 +89,7 @@
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2016-03-06</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2016-03-10</p>
           </hgroup>
   </slide>
 
@@ -99,8 +99,7 @@
 
 </article></slide><slide class=''><hgroup><h2>Ridge Regression </h2><h3> Expectation</h3></hgroup><article  id="ridge-regression-expectation">
 
-<p>\[ \mathbb{E}[\hat{\beta}(\lambda)] = \mathbb{E}[(X&#39;X+ \lambda I_p)^{-1}X&#39;Y]=\\
-  = X&#39;X(\lambda I_p + X&#39;X)^{-1} \beta \]Clearly, \(\mathbb{E}[\hat{\beta}(\lambda)] \neq \beta\) for any \(\lambda &gt;0\).</p>
+<p>\[ \mathbb{E}[\hat{\beta}(\lambda)] = \mathbb{E}[(X&#39;X+ \lambda I_p)^{-1}X&#39;Y]= X&#39;X(\lambda I_p + X&#39;X)^{-1} \beta \]Clearly, \(\mathbb{E}[\hat{\beta}(\lambda)] \neq \beta\) for any \(\lambda &gt;0\).</p>
 
 <p>\[ \lim_{\lambda \rightarrow \infty} \mathbb{E}[\hat{\beta}(\lambda)] = 0_p \]</p>
 
@@ -205,9 +204,9 @@
 <p>The solution is given by</p>
 
 <p>\[ \hat{\beta} = \left\{\begin{array}{cl} 1/n \langle z,y \rangle - \lambda  &amp; \mbox{if}\quad 1/n   \langle z,y \rangle &gt; \lambda\\
-0 &amp;  \mbox{if}\quad 1/n |\langle z,y \rangle | \leq \lambda\\
- 1/n \langle z,y \rangle + \lambda  &amp; \mbox{if}\quad 1/n \langle z,y \rangle &lt; - \lambda
-\end{array}\right.\]</p>
+            0 &amp;  \mbox{if}\quad 1/n |\langle z,y \rangle | \leq \lambda\\
+            1/n \langle z,y \rangle + \lambda  &amp; \mbox{if}\quad 1/n \langle z,y \rangle &lt; - \lambda
+            \end{array}\right.\]</p>
 
 </article></slide><slide class=''><hgroup><h2>Computation of the Lasso Solution </h2><h3> Single Predictor</h3></hgroup><article  id="computation-of-the-lasso-solution-single-predictor-1">
 
@@ -221,15 +220,16 @@
 
 <p>\[ \frac{1}{2n} \sum_i (y_i - \sum_{k \neq j} x_{ik}\beta_k - x_{ij} \beta_k)^2 + \lambda \sum_{k \neq j}|\beta_k| + \lambda |\beta_j|\]</p>
 
-<p>Idea: we repeatedly cycle through the predictors in some fixed order, where at the \(j\)th step, we update the coefficient \(\beta_j\) by minimizing the objective function in this coordinate while holding fixed all other coefficients at their current values.</p>
+<pre >          Idea: we repeatedly cycle through the predictors in some fixed order, where at the $j$th step, we update the coefficient $\beta_j$ by minimizing the objective function in this coordinate while holding fixed all other coefficients at their current values.
+        </pre>
 
 </article></slide><slide class=''><hgroup><h2>Computation of the Lasso Solution </h2><h3> Multiple Predictors</h3></hgroup><article  id="computation-of-the-lasso-solution-multiple-predictors-1">
 
-<p>Withe partial residuals \(r_i^{(j)}= y_i - \sum_{k \neq j} x_{ik} \hat{\beta}_k\)</p>
+<p>With partial residuals \(r_i^{(j)}= y_i - \sum_{k \neq j} x_{ik} \hat{\beta}_k\)</p>
 
 <p>\[ \hat{\beta}_j=\mathcal{S}_{\lambda}(\frac{1}{n}\langle x_j, r^{(j)}\rangle) \]</p>
 
-<p>THe overall algorithm operates by applying this soft-thresholding update repeatedly in a cyclical manner, updating the coordinates of \(\hat{\beta}\) along the way.</p></article></slide>
+<p>The overall algorithm operates by applying this soft-thresholding update repeatedly in a cyclical manner, updating the coordinates of \(\hat{\beta}\) along the way.</p></article></slide>
 
 
   <slide class="backdrop"></slide>
