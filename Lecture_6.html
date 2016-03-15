@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lecture 5 – Ridge and Lasso Regression II</title>
+  <title>Lecture 6 – Of Trees and Forests</title>
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,7 +26,7 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'Lecture 5 – Ridge and Lasso Regression II',
+                title: 'Lecture 6 – Of Trees and Forests',
                         useBuilds: true,
         usePrettify: true,
         enableSlideAreas: true,
@@ -93,133 +93,163 @@
           </hgroup>
   </slide>
 
-<slide class=''><hgroup><h2>Lasso Regression</h2></hgroup><article  id="lasso-regression">
-
-<p>\[ \hat{\beta}(\lambda)=\arg \min_{\beta \in \mathbb{R}^p} \left(||Y-X\beta||_2^2/n + \lambda ||\beta||_1 \right) (*) \]</p>
-
-<p>\(||Y-X\beta||_2^2=\sum_{i=1}^n (Y_i - (X\beta)_i)^2\), \(|| \beta||_1 = \sum_{j=1}^p |\beta_j|\), \(\lambda \geq 0\) penalisation parameter</p>
-
-<p>\((*)\) is equivalent to</p>
-
-<p>\[ \hat{\beta}_{primal}(R) = \arg \min_{\beta \in \mathbb{R}^p}  \left(||Y-X\beta||_2^2/n \right) \]such that \(||\beta||_1 \leq R\) with a one-to-one relation between \(R\) and \(\lambda\).</p>
-
-<p>This optimization problem is a convex problem (and hence efficient computation is possible.)</p>
-
-</article></slide><slide class=''><hgroup><h2>Lasso Regression</h2></hgroup><article  id="lasso-regression-1">
-
-<p>Key assumption: <strong>sparsity</strong></p>
-
-<p>The number of variables \(p\) can grow with the sample size and even be larger \(n\), but the number of non-zero coefficients \(s\) is required to be smaller than \(n\) (but may also grow with the sample size).</p>
-
-<p>Notation:</p>
+<slide class=''><hgroup><h2>Introduction</h2></hgroup><article  id="introduction">
 
 <ul>
-<li>\(\beta^0\) true vector with components \(\beta_j^0, j=1,\ldots,p\)<br/></li>
-<li>\(S_0=\{j: \beta^0_j \neq 0, j=1,\ldots,p\}\), \(s=|S|\)<br/></li>
-<li>\(\hat{S}=\{j: \hat{\beta}_j \neq 0, j=1,\ldots,p\}\)</li>
+<li>Idea: Partition the feature / covariables space into a set of rectangles and then fit a simple model (constant) in each one. So the estimated function is the average of outcomes falling in this rectangle.</li>
+<li>Recursive binary partitions, i.e. sequentially we choose variable and corresponding split pint which achieve best fit until some stopping criterion is reached.</li>
+<li>Here: Regression, but also used for classification (with different criteria)</li>
+<li>Example [cf blackboard]</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>A glimpse on the theory</h2></hgroup><article  id="a-glimpse-on-the-theory">
+</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees">
+
+<p>\(n\) observations \((x_i,y_i), i=1,\ldots,n, \quad x_i=(x_{i1}, \ldots, x_{ip})\)</p>
+
+<p>Given a partition into \(M\) regions \(R_1,\ldots,R_M\) with a fitted constant in each region:</p>
+
+<p>\[ f(x) = \sum_{m=1}^M c_m I(x \in R_m) \]</p>
+
+<p>Minimizing the residual sum of squares (RSS) \(\sum_{x_i \in R_m} (y_i-f(x_i))^2\) leads to \(\hat{c}_m=ave(y_i|x_i \in R_m)\)</p>
+
+<p>Finding the best partition in terms of minimal RSS is generally computational infeasible.</p>
+
+<p>Instead: greedy algorithm</p>
+
+</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-1">
+
+<p><strong>Algorithm:</strong></p>
+
+<p>Start with all data<br/>1. We consider a splitting variable \(j\) and split point \(s\), s.t.\[ \min_{j, s} \left[ \min_{c_1} \sum_{x_i \in R_1(j,s)} (y_i-c_1)^2 
+    + \min_{c_2} \sum_{x_i \in R_2(j,s)} (y_i-c_2)^2 \right] \]with \(R_1(j,s)=\{ X|X_j \leq s \}\), \(R_2(j,s)=\{ X|X_j &gt; s \}\)<br/>Determination of the best pair \((j,s)\) is feasible.<br/>2. Repeat 1) on each of the two resulting regions<br/>3. Stop when some criterion is reached</p>
+
+</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-2">
+
+<p>How large should we grow a tree?</p>
+
+<p>Tree size is a tuning parameter governing the model&#39;s complexity.</p>
+
+<p>It should be chosen adaptively from the data.</p>
+
+<p>Strategy 1: Split tree node only, if decrease in rss is sufficiently high (but too short-sighted)</p>
+
+<p>Strategy 2: (prefered)</p>
 
 <ul>
-<li>convergence in prediction norm</li>
-<li>convergence in \(\ell_p\) norm</li>
-<li>variable screening</li>
-<li>variable selection</li>
+<li>Given a large tree, stopping when some minimal node size is reached<br/></li>
+<li>Prune the tree by <em>cost-complexity pruning</em></li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Theory </h2><h3> Convergence in prediction norm</h3></hgroup><article  id="theory-convergence-in-prediction-norm">
+</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-3">
+
+<p>Subtree \(T \subset T_0\) is any tree that can be obtained by pruning \(T_0\), i.e. collapsing any number of its internal nodes.We denote the terminal nodes by \(m=1,\ldots,M\).</p>
+
+<p>\(N_m=|\{x_i \in R_m\}|\)</p>
+
+<p>\(\hat{c}_m = 1/N_m \sum_{x_i in R_m} y_i\)</p>
+
+<p>\(Q_m(T) = \sum_{x_i in R_m} (y_i - \hat{c}_m)^2\)</p>
+
+<p>Cost-complexity criterion \(C_{\alpha}(T)=\sum_{m=1}^{M} N_m Q_m(T) + \alpha |T|\)</p>
+
+</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-4">
+
+<p>Find \(T_{\alpha} \subset T_0\) to minimize \(C_{\alpha}(T)\)</p>
+
+<p>\(\alpha\) governs the trade-off between tree-size and its goodness of fit to the data.<br/>\(\alpha=0\) yields full tree.</p>
+
+<p>Choice of \(\alpha\) by cross validation.</p>
+
+<p>Final tree \(T_{\hat{\alpha}}\)</p>
+
+</article></slide><slide class=''><hgroup><h2>Bagging</h2></hgroup><article  id="bagging">
 
 <ul>
-<li>Conditions:</li>
-<li>Restricted eigenvalue condition / compatability condition</li>
-<li>no condition on the non-zero coefficients</li>
-<li>Result:\[||X(\hat{\beta}-\beta_0)||^2_2/n = O_P(s \log(p)/n)\]</li>
-<li>Interpretation</li>
+<li>Bagging: Booststrap aggregation or bagging averages</li>
+<li>Training data \(Z=\{(x_1,y_1),\ldots,(x_n,y_n)\}\)</li>
+<li>Fit a model to \(Z\) and obtain \(\hat{f}(x)\)</li>
+<li>Idea: average the predictions over a collection of bootstrap samples, thereby reducing its variance</li>
+<li></li>
+<li>\(Z^{*b}, b=1,\ldots,B\) booststrap samples</li>
+<li>Fit model to get \(\hat{f}^{*,b}(x)\)</li>
+<li>\(\hat{f}_{bag}(x)=1/B \sum_{b=1}^B \hat{f}^{*,b}(x)\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Theroy </h2><h3> Convergence in \(\ell_p\) norm</h3></hgroup><article  id="theroy-convergence-in-ell_p-norm">
+</article></slide><slide class=''><hgroup><h2>Bagging</h2></hgroup><article  id="bagging-1">
 
 <ul>
-<li>Conditions:</li>
-<li>Restricted eigenvalue condition / compatability condition</li>
-<li>no condition on the non-zero coefficients</li>
-<li>Result:\[||\hat{\beta}-\beta_0||_q = O_P(s^{1/q} \sqrt{\log(p)/n})\] with \(q \in \{1,2\}.\)</li>
-<li>Interpretation</li>
+<li>\(\hat{f}_{bag}(x)\) estimate of the true bagging value \(E_{\hat{\mathcal{P}}} \hat{f}^{*}(x)\)</li>
+<li>Well suited for high-variance, low-bias procedures</li>
+<li>Application: regression trees</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Theory </h2><h3> Variable Screening</h3></hgroup><article  id="theory-variable-screening">
+</article></slide><slide class=''><hgroup><h2>Random Forests</h2></hgroup><article  id="random-forests">
 
 <ul>
-<li>Conditions</li>
-<li>Restricted eigenvalue condition</li>
-<li>beta-min condition: \(\min_{j \in S} |\beta_j^0| &gt;&gt; C \sqrt{s \log(p)/n}\) (\(C\) some constant)</li>
-<li>Result:\[ \mathbb{P}[S_0 \subset \hat{S}] \rightarrow 1\](\(p \geq n \rightarrow \infty\))</li>
-<li>Interpretation</li>
+<li>Introduced by Br eiman (2001)</li>
+<li>Very powerful (good performance) in many applications</li>
+<li>Modified version of bagging</li>
+<li>Idea: Building a large collection of de-correlated trees and then average them (Breiman, 2001)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Theory </h2><h3> Variable Selection</h3></hgroup><article  id="theory-variable-selection">
+</article></slide><slide class=''><hgroup><h2>Random Forests</h2></hgroup><article  id="random-forests-1">
 
 <ul>
-<li>Conditions:</li>
-<li>neighbourhood stability condition (equivalent to irrepresentable condition)</li>
-<li>beta-min condition</li>
-<li>Result:\[ \mathbb{P}[S_0 = \hat{S}] \rightarrow 1\]</li>
+<li>Trees: low bias, but very noisy / high variance \(\Rightarrow\) goal : reduction of variance</li>
+<li>Trees generated by bagging are identically distributed, but not necessarily independent</li>
+<li>For identical distributed variables with positive pairwise correlation \(\rho\): variance of average \(\rho \sigma^2 + (1-\rho)/B \sigma^2\) (\(\rho\) correlation of the trees) (for i.i.d. rvs: \(\sigma^2/B\))</li>
+<li>Application: nonlinear estimators like random trees</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Extensions</h2></hgroup><article  id="extensions">
+</article></slide><slide class=''><hgroup><h2>Random Forests </h2><h3> Procedure</h3></hgroup><article  id="random-forests-procedure">
 
 <ul>
-<li>Adaptive Lasso (Zou, 2006)</li>
-<li>Post-Lasso (Belloni &amp; Chernozhukov, 2011)</li>
-<li>Elastic Net (Zou &amp; Hastie, 2005)</li>
-<li>LAVA (Chernozhukov et al., 2015)</li>
-<li>Group Lasso</li>
+<li>Bootstrap samples \(1,\ldots,B\)</li>
+<li>Build trees and<br/>&quot;Before each split, select \(m \leq p\) of the input variables at arandom as candidates for splitting&quot; (e.g. \(m=\sqrt{p}, m=1\))</li>
+<li>Aggregation:\[\hat{f}_{rf}(x) = \frac{1}{B} \sum_{b=1}^B T(x; \Theta_b)\]\(\Theta_b\): split variables, cut points, terminal node values for \(b\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Adaptive Lasso (Zou, 2006)</h2></hgroup><article  id="adaptive-lasso-zou-2006">
+</article></slide><slide class=''><hgroup><h2>Ensemble Learning </h2><h3> Introduction</h3></hgroup><article  id="ensemble-learning-introduction">
 
 <ul>
-<li>\(\hat{\beta}_{adapt}(\lambda)=\arg \min_{\beta} \left( ||Y-X\beta||^2_2/n + \lambda \sum_{j=1}^p \frac{|\beta_j|}{|\hat{\beta}_{init,j}|} \right)\)<br/>where \(\hat{\beta}_{init}\) is an initial estimator (e.g. Lasso from an initial stage)</li>
-<li>Intuition: \(\hat{\beta}_{init,j}=0\) leads to \(\hat{\beta}_{adapt,j}=0\)<br/>\(|\hat{\beta}_{init,j}|\) large \(\Rightarrow\) small penalty</li>
-<li>Goal: Reduction of bias of Lasso</li>
+<li>Idea: To build a prediction model by combing the strengths of a collection of simpler base models.</li>
+<li>Bagging, random forests are ensemble methods for classification, where a committee of trees each cast a vote for predicted class.</li>
+<li>Boosting proposed as a committee method where the committee of weak learners evolves over time with a weighted vote for the members</li>
+<li>Ensemble learning<br/></li>
+<li>Developing a population of base learners from the training data<br/></li>
+<li>Combining them to form the composite predictor</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Post-Lasso (Belloni &amp; Chernozhukov, 2011)</h2></hgroup><article  id="post-lasso-belloni-chernozhukov-2011">
+</article></slide><slide class=''><hgroup><h2>Learning Ensembles</h2></hgroup><article  id="learning-ensembles">
 
 <ul>
-<li>\(\hat{\beta}(\lambda) = \arg \min \left( ||Y-X\beta||^2_2/n + \lambda |\beta|_1 \right)\)</li>
-<li>\(\hat{T}=supp(\hat{\beta}) =\{ j \in \{1,\ldots,p\}: |\hat{\beta}_j|&gt;0 \}\)</li>
-<li>Post model selection estimator \(\tilde{\beta}\) (Post-Lasso)\[ \tilde{\beta}= \arg \min_{\beta} ||Y-X\beta||^2_2/2: \quad \beta_j=0 \mbox{for each} j \in \hat{T}^Cth\]</li>
-<li>Idea: Reduce bias by running OLS on the variables selected by Lasso in a first stage</li>
+<li>We consider functions of the form\[ f(x) = \alpha_0 + \sum_{T_k \in \mathcal{T}} \alpha_k T_k(x) \]with \(\mathcal{T}\) dictionary of basis functions, e.g. trees with \(|\mathcal{T}|\) quite large.<br/></li>
+<li>Hybrid approach of Friedman and Popescu (2003)<br/></li>
+<li>A finite dictionary \(\mathcal{T}_L=\{T_1(x),\ldots, T_M(x)\}\) of basis functions is induced from the training data.<br/></li>
+<li>A family of functions \(f_{\lambda}(x)\) is built by fitting a lasso path in this dictionary\[ \alpha(\lambda) = argmin_{\alpha} \sum_{i=1}^N L[y_i, \alpha_0 + \sum_{m=1}^M \alpha_, T_m(x_i)] + \lambda \sum_{m=1}^M   |\alpha_m|\]</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Elastic Net (Zou &amp; Hastie, 2005)</h2></hgroup><article  id="elastic-net-zou-hastie-2005">
+</article></slide><slide class=''><hgroup><h2>Ensemble Generating Algorithm</h2></hgroup><article  id="ensemble-generating-algorithm">
+
+<p>How to choose the set of base functions \(b(x;\gamma)\) forming \(\mathcal{T}_L\)?</p>
 
 <ul>
-<li>Idea: Combination of \(\ell_1-\) and \(\ell_2-\)penalty</li>
-<li>\(\ell_1-\)penalty: sparse model</li>
-<li>\(\ell_2-\)penalty: enforcing grouping effect, stabilization regularization path, removes limit on number of selected variables\[\hat{\beta}= \arg \min \left( ||Y-X\beta||^2_2/n + \lambda_2 ||\beta||_2 + \lambda_1 ||\beta||_1 \right)\]</li>
-<li>\(\hat{\beta}_{enet}=(1+\lambda)(\hat{\beta})\)</li>
+<li>\(f_0(x)=\arg \min_c \sum_{i=1}^N L(y_i,c)\)</li>
+<li>For \(m=1\) to \(M\) do<br/></li>
+<li>\(\gamma_m = \arg \min_{\gamma} \sum_{i \in S_m(\eta)} L(y_i, f_{m-1}(x_i) + b(x_i;\gamma))\)<br/></li>
+<li>\(f_m(x)=f_{m-1}(x) + \nu b(x;\gamma_m)\)<br/></li>
+<li>\(\mathcal{T}_{ISLE}=\{ b(x;\gamma_1), \ldots, b(x;\gamma_M) \}\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>LAVA (Chernozhukov et al., 2015)</h2></hgroup><article  id="lava-chernozhukov-et-al.-2015">
+<p>\(S_m(\eta)\) refers to a subsample of \(N \eta\) of the training observations, typically without replacement.<br/>Recommendation: \(\eta \leq 1/2\) and \(\eta \sim 1/\sqrt(N)\), \(\nu=0.1\)<br/><em>Importance sampled learning ensemble (ISLE)</em></p>
+
+</article></slide><slide class=''><hgroup><h2>Special cases of the Algorithm</h2></hgroup><article  id="special-cases-of-the-algorithm">
 
 <ul>
-<li>Idea: \(\theta= \underbrace{\beta} + \underbrace{\delta}=\) dense + sparse part</li>
-<li>\(\hat{\theta}=\hat{\beta} + \hat{\delta}\)</li>
-<li>\[ (\hat{\beta},\hat{\delta})=\arg \min_{(\beta&#39;, \delta&#39;)} \{l(data, \beta+\delta) + \lambda_2 ||\beta||_2^2 + \lambda_1|| \delta||_1\]</li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Group Lasso</h2></hgroup><article  id="group-lasso">
-
-<ul>
-<li>Motivation: with factor variables, one would like to choose if all categories or none of them should be included.</li>
-<li>\(\mathcal{G}_1, \ldots, \mathcal{G}_q\) groups which partition the index set \(\{1,\ldots,p\}\)</li>
-<li>\(\beta=(\beta_{\mathcal{G}_1}, \ldots, \beta_{\mathcal{G}_1})\), \(\mathcal{G}_j=\{ \beta_r, r \in \mathcal{G}_j\)</li>
-<li>\(\hat{\beta}(\lambda)=\arg \min_{\beta} Q_{\lambda}(\beta)\)</li>
-<li>\[Q_{\lambda}(\beta)=1/n ||Y-X\beta||^2_2 + \lambda \sum_{j=1}^q m_j ||\beta_{\mathcal{G}_j}||_2\]\(m_j=\sqrt{T_j}\), \(T_j=|\mathcal{G}_j|\)</li>
-<li>Either all variables in a group have either value zero or have a value different from zero. Selection of groups of variables (e.g. factors!)</li>
+<li>Bagging: \(\eta=1\), samples with replacement, \(\nu=0\)</li>
+<li>Random forest: sampling is similar with more randomness introduced by the selection of the splitting variable.</li>
+<li>Gradient boosting with shrinkage uses \(\eta=1\)</li>
+<li>Stochastic gradient boosting: identical</li>
 </ul></article></slide>
 
 
