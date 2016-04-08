@@ -27,9 +27,9 @@ Here the task is to simulate from this model, where we assume that the coefficie
 * Set $n=100$, $p=10$, $s=3$
 * Create the coefficient vector $\beta$. Useful functions: *c()*, *rep()*
 * Simulate a design matrix and the error. Useful functions: *matrix()*, *rnorm*
-* Construct the model from above. Useful function: *%*%* for matrix multiplication
+* Construct the model from above. Useful function: $\%*\%$ for matrix multiplication
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 set.seed(12345)
 n <- 100
 p <- 10
@@ -43,19 +43,19 @@ y <- X%*%beta + eps
 
 ## Ridge Regression I
 
-* Estimate a ridge regression on simulated data from Exercise 1. Useful function: *glmnet* from the package *glmnet* with default $\alpha=1$. Also check out the option *lambda* in *glmnet* and the function *cv.glmnet* to perform cross-validation to determine $\lambda$. 
+* Estimate a ridge regression on simulated data from Exercise 1. Useful function: *glmnet* from the package *glmnet* with default $\alpha=0$. Also check out the option *lambda* in *glmnet* and the function *cv.glmnet* to perform cross-validation to determine $\lambda$. 
 * Simulate new data from the same model and make predictions both in- and out-of-sample. Calculate the MSE for the predictions (also for the in-sample fit). Useful function: *predict*
 * Repeat the previous steps with different settings on $n$, $p$, and $s$.
 * Compare the results with ols regression!
 
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 library(glmnet)
-ridge1 <- glmnet(X, y, alpha=1)
+ridge1 <- glmnet(X, y, alpha=0)
 plot(ridge1)
 # lambda.grid <- seq(2,0, by=0.05)
 # ridge2 <- glmnet(X, y, lambda=lambda.grid, alpha=1)
-cv.out <- cv.glmnet(X, y, alpha=1)
+cv.out <- cv.glmnet(X, y, alpha=0)
 plot(cv.out)
 bestlam <- cv.out$lambda.min
 ridge.pred <- predict(ridge1, s= bestlam, newx=X) 
@@ -84,9 +84,38 @@ head(Coefs)
 
 ## Lasso Estimation I
 
-* Redo the calculations from above but with Lasso with varying $n$, $p$, and $s$. Hint: Set option $\alpha$ in *glmnet* to $0$
+* Redo the calculations from above but with Lasso with varying $n$, $p$, and $s$. Hint: Set option $\alpha$ in *glmnet* to $1$
 * Compare the results! (In particular compare a "sparse" with a "dense" setting)
 * The package *hdm* contains the function *rlasso* which determines the penalization parameter by some theoretical grounded method. Look up the function in the man pages and / or vignette and analyze now the data set using this function. Compare the results.
+
+```{r, eval=FALSE}
+lasso1 <- glmnet(X, y, alpha=1)
+plot(lasso1)
+# lambda.grid <- seq(2,0, by=0.05)
+# ridge2 <- glmnet(X, y, lambda=lambda.grid, alpha=1)
+cv.lasso.out <- cv.glmnet(X, y, alpha=1)
+plot(cv.lasso.out)
+bestlam <- cv.lasso.out$lambda.min
+lasso.pred <- predict(lasso1, s= bestlam, newx=X) 
+MSE.lasso.ins <- mean((y-lasso.pred)^2)
+lasso.pred.out <-  predict(lasso1, s= bestlam, newx=Xnew)
+MSE.lasso.out <- mean((ynew-lasso.pred.out)^2)
+```
+
+
+```{r, eval=FALSE}
+library(hdm)
+lasso2 <- rlasso(y~X)
+lasso2.pred.ins <- predict(lasso2)
+MSE.lasso2.ins <-  mean((y-lasso2.pred.ins)^2)
+lasso2.pred.out <- predict(lasso2, newdata=Xnew)
+MSE.lasso2.out <-  mean((ynew-lasso2.pred.out)^2)
+```
+
+
+## Bonus Excercise
+
+* Write a loop around the programs above so that you can perform a small simulation study! 
 
 
 

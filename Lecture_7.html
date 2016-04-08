@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lecture 6 – Of Trees and Forests</title>
+  <title>Lecture 7 – Neural Nets</title>
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,7 +26,7 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'Lecture 6 – Of Trees and Forests',
+                title: 'Lecture 7 – Neural Nets',
                         useBuilds: true,
         usePrettify: true,
         enableSlideAreas: true,
@@ -93,163 +93,109 @@
           </hgroup>
   </slide>
 
-<slide class=''><hgroup><h2>Introduction</h2></hgroup><article  id="introduction">
+<slide class=''><hgroup><h2>Recap: What have we already learnt?</h2></hgroup><article  id="recap-what-have-we-already-learnt">
+
+<ol>
+<li>Introduction (Definitions, Basic Concepts, Challenges in High-Dimensions)</li>
+<li>Linear Regression and Extensions (Linear Regression, Regression and Smoothing Splines)</li>
+<li>Ridge Regression</li>
+<li>Lasso Regression (Basic Principle, Some Results, Extensions)</li>
+<li>Of Trees and Forests (Regressions Trees, Bagging, Random Forests)</li>
+</ol>
+
+<p>Today: Neural Nets / Deep Learning</p>
+
+</article></slide><slide class=''><hgroup><h2>Neural Networks </h2><h3> Introduction</h3></hgroup><article  id="neural-networks-introduction">
 
 <ul>
-<li>Idea: Partition the feature / covariables space into a set of rectangles and then fit a simple model (constant) in each one. So the estimated function is the average of outcomes falling in this rectangle.</li>
-<li>Recursive binary partitions, i.e. sequentially we choose variable and corresponding split pint which achieve best fit until some stopping criterion is reached.</li>
-<li>Here: Regression, but also used for classification (with different criteria)</li>
-<li>Example [cf blackboard]</li>
+<li>Inspired by the mode of operation of the brain, imitation of the human brain</li>
+<li>Idea: Extract linear combinations of the inputs as derived features, and model the target (\(Y\)) as a nonlinear function of these features</li>
+<li>Fields: Statistics, Artificial Intelligence</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees">
-
-<p>\(n\) observations \((x_i,y_i), i=1,\ldots,n, \quad x_i=(x_{i1}, \ldots, x_{ip})\)</p>
-
-<p>Given a partition into \(M\) regions \(R_1,\ldots,R_M\) with a fitted constant in each region:</p>
-
-<p>\[ f(x) = \sum_{m=1}^M c_m I(x \in R_m) \]</p>
-
-<p>Minimizing the residual sum of squares (RSS) \(\sum_{x_i \in R_m} (y_i-f(x_i))^2\) leads to \(\hat{c}_m=ave(y_i|x_i \in R_m)\)</p>
-
-<p>Finding the best partition in terms of minimal RSS is generally computational infeasible.</p>
-
-<p>Instead: greedy algorithm</p>
-
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-1">
-
-<p><strong>Algorithm:</strong></p>
-
-<p>Start with all data<br/>1. We consider a splitting variable \(j\) and split point \(s\), s.t.\[ \min_{j, s} \left[ \min_{c_1} \sum_{x_i \in R_1(j,s)} (y_i-c_1)^2 
-    + \min_{c_2} \sum_{x_i \in R_2(j,s)} (y_i-c_2)^2 \right] \]with \(R_1(j,s)=\{ X|X_j \leq s \}\), \(R_2(j,s)=\{ X|X_j &gt; s \}\)<br/>Determination of the best pair \((j,s)\) is feasible.<br/>2. Repeat 1) on each of the two resulting regions<br/>3. Stop when some criterion is reached</p>
-
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-2">
-
-<p>How large should we grow a tree?</p>
-
-<p>Tree size is a tuning parameter governing the model&#39;s complexity.</p>
-
-<p>It should be chosen adaptively from the data.</p>
-
-<p>Strategy 1: Split tree node only, if decrease in rss is sufficiently high (but too short-sighted)</p>
-
-<p>Strategy 2: (preferred)</p>
+</article></slide><slide class=''><hgroup><h2>Project Pursuit Regression</h2></hgroup><article  id="project-pursuit-regression">
 
 <ul>
-<li>Given a large tree, stopping when some minimal node size is reached<br/></li>
-<li>Prune the tree by <em>cost-complexity pruning</em></li>
+<li>Input vector \(X\) with \(p\) components; target \(Y\)</li>
+<li>\(\omega_m, m=1,\ldots,M\) unit \(p-\)vectors of unknown parameters</li>
+<li>Project Pursuit Regression (PPR) model:\[ f(x)= \sum_{m=1}^M g_m(\omega_m&#39; x)\]\(V_m=\omega_m&#39; x\) derived feature; projection on \(\omega_m\)</li>
+<li>\(g_m\) estimated along with \(\omega_m\) by flexible smoothing methods</li>
+<li>\(g_m(\omega_m &#39; x)\) &quot;ridge function&quot; in \(\mathbb{R}^p\)</li>
+<li>Useful for prediction; difficult to interpret</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-3">
-
-<p>Subtree \(T \subset T_0\) is any tree that can be obtained by pruning \(T_0\), i.e. collapsing any number of its internal nodes.We denote the terminal nodes by \(m=1,\ldots,M\).</p>
-
-<p>\(N_m=|\{x_i \in R_m\}|\)</p>
-
-<p>\(\hat{c}_m = 1/N_m \sum_{x_i in R_m} y_i\)</p>
-
-<p>\(Q_m(T) = \sum_{x_i in R_m} (y_i - \hat{c}_m)^2\)</p>
-
-<p>Cost-complexity criterion \(C_{\alpha}(T)=\sum_{m=1}^{M} N_m Q_m(T) + \alpha |T|\)</p>
-
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-4">
-
-<p>Find \(T_{\alpha} \subset T_0\) to minimize \(C_{\alpha}(T)\)</p>
-
-<p>\(\alpha\) governs the trade-off between tree-size and its goodness of fit to the data.<br/>\(\alpha=0\) yields full tree.</p>
-
-<p>Choice of \(\alpha\) by cross validation.</p>
-
-<p>Final tree \(T_{\hat{\alpha}}\)</p>
-
-</article></slide><slide class=''><hgroup><h2>Bagging</h2></hgroup><article  id="bagging">
+</article></slide><slide class=''><hgroup><h2>Neural Networks</h2></hgroup><article  id="neural-networks">
 
 <ul>
-<li>Bagging: Bootstrap aggregation or bagging averages</li>
-<li>Training data \(Z=\{(x_1,y_1),\ldots,(x_n,y_n)\}\)</li>
-<li>Fit a model to \(Z\) and obtain \(\hat{f}(x)\)</li>
-<li>Idea: average the predictions over a collection of bootstrap samples, thereby reducing its variance</li>
-<li></li>
-<li>\(Z^{*b}, b=1,\ldots,B\) bootstrap samples</li>
-<li>Fit model to get \(\hat{f}^{*,b}(x)\)</li>
-<li>\(\hat{f}_{bag}(x)=1/B \sum_{b=1}^B \hat{f}^{*,b}(x)\)</li>
+<li>Large class of models / learning methods</li>
+<li>Here: single hidden layer back-propagation network / single layer perceptron</li>
+<li>Two-stage regression or classification model represented by network diagram</li>
+<li>Can be seen as nonlinear statistical models</li>
+<li>Diagram cf blackboard</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Bagging</h2></hgroup><article  id="bagging-1">
+</article></slide><slide class=''><hgroup><h2>Neural Networks</h2></hgroup><article  id="neural-networks-1">
 
 <ul>
-<li>\(\hat{f}_{bag}(x)\) estimate of the true bagging value \(E_{\hat{\mathcal{P}}} \hat{f}^{*}(x)\)</li>
-<li>Well suited for high-variance, low-bias procedures</li>
-<li>Application: regression trees</li>
+<li>\(Z_m= \sigma(\alpha_{0m} + \alpha_m&#39;x)), m=1,\ldots, M\)<br/></li>
+<li>\(T_k = \beta_{0k} + \beta_k&#39;z, k=1,\ldots, K\)<br/></li>
+<li>\(f_k(x) = g_k(T), k=1,\ldots, K\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Random Forests</h2></hgroup><article  id="random-forests">
+</article></slide><slide class=''><hgroup><h2>Neural Networks</h2></hgroup><article  id="neural-networks-2">
 
 <ul>
-<li>Introduced by Breiman (2001)</li>
-<li>Very powerful (good performance) in many applications</li>
-<li>Modified version of bagging</li>
-<li>Idea: Building a large collection of de-correlated trees and then average them (Breiman, 2001)</li>
+<li>Activation function: \(\sigma(v)=\frac{1}{1+e^{-v}}\) (sigmoid) (cf blackboard)</li>
+<li>Regression case: \(g_k(T)=T_k\);</li>
+<li>Classification case: \(g_k(T)=\frac{e^{T_k}}{\sum_{l=1}^K e^{T_l}}\) (softmax fct.)</li>
+<li>Related to PPR</li>
+<li>Measure of fit \(R(\theta)\): sum-of-squared errors (regression), or squared error / cross entropy</li>
+<li>Estimation: \(R(\theta)\) by gradient descent (back propagation); regularization might be needed</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Random Forests</h2></hgroup><article  id="random-forests-1">
+</article></slide><slide class=''><hgroup><h2>Fitting Neural Networks</h2></hgroup><article  id="fitting-neural-networks">
 
 <ul>
-<li>Trees: low bias, but very noisy / high variance \(\Rightarrow\) goal : reduction of variance</li>
-<li>Trees generated by bagging are identically distributed, but not necessarily independent</li>
-<li>For identical distributed variables with positive pairwise correlation \(\rho\): variance of average \(\rho \sigma^2 + (1-\rho)/B \sigma^2\) (\(\rho\) correlation of the trees) (for i.i.d. rvs: \(\sigma^2/B\))</li>
-<li>Application: nonlinear estimators like random trees</li>
+<li>unknown parameters, called weights, \(\theta\):</li>
+<li>\(\{ \alpha_{0m}, \alpha_m; m=1,2,\ldots, M \}\) \(M(p+1)\) weights</li>
+<li>\(\{ \beta_{0m}, \beta_m; k=1,2,\ldots, K \}\) \(K(p+1)\) weights</li>
+<li>Criterion function: \(R(\theta)= \sum_{k=1}^K \sum_{i=1}^N (y_{ik} - f_k(x_i))^2 = \sum_{i=1}^N R_i\)</li>
+<li>Derivatives: \(\frac{\partial R_i}{\partial \beta_{km}} = -2(y_i-f_k(x_i))g_k&#39;(\beta_k^Tz_i)z_{mi}\)</li>
+<li>Analog Derivatives \(\frac{\partial R_i}{\partial \alpha_{ml}}\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Random Forests </h2><h3> Procedure</h3></hgroup><article  id="random-forests-procedure">
+</article></slide><slide class=''><hgroup><h2>Fitting Neural Networks</h2></hgroup><article  id="fitting-neural-networks-1">
+
+<p>A gradient descent updata at the (r+1)st iteration is given by<br/>* \(\beta_{km}^{(r+1)} = \beta_{km}^{(r)} - \gamma_r \sum_{i=1}^N \frac{\partial R_i}{\partial \beta_{km}^{(r)}}\)<br/>* \(\alpha_{ml}^{(r+1)} = \alpha_{ml}^{(r)} - \gamma_r \sum_{i=1}^N \frac{\partial R_i}{\partial \alpha_{ml}^{(r)}}\)<br/>* \(\gamma_r\) learning rate</p>
+
+</article></slide><slide class=''><hgroup><h2>Fitting Neural Networks</h2></hgroup><article  id="fitting-neural-networks-2">
 
 <ul>
-<li>Bootstrap samples \(1,\ldots,B\)</li>
-<li>Build trees and<br/>&quot;Before each split, select \(m \leq p\) of the input variables at random as candidates for splitting&quot; (e.g. \(m=\sqrt{p}, m=1\))</li>
-<li>Aggregation:\[\hat{f}_{rf}(x) = \frac{1}{B} \sum_{b=1}^B T(x; \Theta_b)\]\(\Theta_b\): split variables, cut points, terminal node values for \(b\)</li>
+<li>Rewrite Derivatives as</li>
+<li>\(\frac{\partial R_i}{\partial \beta_{km}} = \delta_{ki}z_{mi}\)</li>
+<li>\(\frac{\partial R_i}{\partial \alpha_{ml}} = s_{mi}x_{il}\)</li>
+<li>\(s_{mi}=\sigma&#39;(\alpha^T_m x_i) \sum_{k=1}^K \beta_{km} \delta_{ki}\) (*)</li>
+<li>\(\delta_{ki}\) and \(s_{mi}\) &quot;errors&quot;</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Ensemble Learning </h2><h3> Introduction</h3></hgroup><article  id="ensemble-learning-introduction">
+</article></slide><slide class=''><hgroup><h2>Fitting Neural Networks</h2></hgroup><article  id="fitting-neural-networks-3">
+
+<p>Estimation via back-propagation equations:</p>
 
 <ul>
-<li>Idea: To build a prediction model by combing the strengths of a collection of simpler base models.</li>
-<li>Bagging, random forests are ensemble methods for classification, where a committee of trees each cast a vote for predicted class.</li>
-<li>Boosting proposed as a committee method where the committee of weak learners evolves over time with a weighted vote for the members</li>
-<li>Ensemble learning<br/></li>
-<li>Developing a population of base learners from the training data<br/></li>
-<li>Combining them to form the composite predictor</li>
+<li>Updates in updating step with two-pass algorithm<br/></li>
+<li>Forward pass: current weights are fixed, calculate \(\hat{f}_k(x_i)\)<br/></li>
+<li>Backward pass calculate \(\delta_{ki}\), back-propogate via (*), calculate gradients and update.</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Learning Ensembles</h2></hgroup><article  id="learning-ensembles">
+</article></slide><slide class=''><hgroup><h2>Neural Networks</h2></hgroup><article  id="neural-networks-3">
 
 <ul>
-<li>We consider functions of the form\[ f(x) = \alpha_0 + \sum_{T_k \in \mathcal{T}} \alpha_k T_k(x) \]with \(\mathcal{T}\) dictionary of basis functions, e.g. trees with \(|\mathcal{T}|\) quite large.<br/></li>
-<li>Hybrid approach of Friedman and Popescu (2003)<br/></li>
-<li>A finite dictionary \(\mathcal{T}_L=\{T_1(x),\ldots, T_M(x)\}\) of basis functions is induced from the training data.<br/></li>
-<li>A family of functions \(f_{\lambda}(x)\) is built by fitting a lasso path in this dictionary\[ \alpha(\lambda) = argmin_{\alpha} \sum_{i=1}^N L[y_i, \alpha_0 + \sum_{m=1}^M \alpha_, T_m(x_i)] + \lambda \sum_{m=1}^M   |\alpha_m|\]</li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Ensemble Generating Algorithm</h2></hgroup><article  id="ensemble-generating-algorithm">
-
-<p>How to choose the set of base functions \(b(x;\gamma)\) forming \(\mathcal{T}_L\)?</p>
-
-<ul>
-<li>\(f_0(x)=\arg \min_c \sum_{i=1}^N L(y_i,c)\)</li>
-<li>For \(m=1\) to \(M\) do<br/></li>
-<li>\(\gamma_m = \arg \min_{\gamma} \sum_{i \in S_m(\eta)} L(y_i, f_{m-1}(x_i) + b(x_i;\gamma))\)<br/></li>
-<li>\(f_m(x)=f_{m-1}(x) + \nu b(x;\gamma_m)\)<br/></li>
-<li>\(\mathcal{T}_{ISLE}=\{ b(x;\gamma_1), \ldots, b(x;\gamma_M) \}\)</li>
-</ul>
-
-<p>\(S_m(\eta)\) refers to a subsample of \(N \eta\) of the training observations, typically without replacement.<br/>Recommendation: \(\eta \leq 1/2\) and \(\eta \sim 1/\sqrt(N)\), \(\nu=0.1\)<br/><em>Importance sampled learning ensemble (ISLE)</em></p>
-
-</article></slide><slide class=''><hgroup><h2>Special cases of the Algorithm</h2></hgroup><article  id="special-cases-of-the-algorithm">
-
-<ul>
-<li>Bagging: \(\eta=1\), samples with replacement, \(\nu=0\)</li>
-<li>Random forest: sampling is similar with more randomness introduced by the selection of the splitting variable.</li>
-<li>Gradient boosting with shrinkage uses \(\eta=1\)</li>
-<li>Stochastic gradient boosting: identical</li>
+<li>Starting values: random values near zero. Intuition: model starts out nearly linear and becomes nonlinear as the weights increase.</li>
+<li>Overfitting: to prevent overfitting early stopping and penalization (weight decay; \(R(\theta) + \lambda J(\theta)\))</li>
+<li>Scaling of the inputs: large effects on the quality of the final solution. Default: standarization and normlization of of inputs (mean zero and unit variance)</li>
+<li>Number of hidden units and layers: better to have too many hidden units than too few. (Flexibility + Regularization!)</li>
+<li>Multiple Minima: nonconvex crtierio function with many local minima (different starting values, average of predictions of collection of neural nets)</li>
 </ul></article></slide>
 
 
