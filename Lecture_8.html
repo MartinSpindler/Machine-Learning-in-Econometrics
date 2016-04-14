@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lecture 6 – Of Trees and Forests</title>
+  <title>Lecture 8 – Boosting</title>
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,7 +26,7 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'Lecture 6 – Of Trees and Forests',
+                title: 'Lecture 8 – Boosting',
                         useBuilds: true,
         usePrettify: true,
         enableSlideAreas: true,
@@ -96,160 +96,209 @@
 <slide class=''><hgroup><h2>Introduction</h2></hgroup><article  id="introduction">
 
 <ul>
-<li>Idea: Partition the feature / covariables space into a set of rectangles and then fit a simple model (constant) in each one. So the estimated function is the average of outcomes falling in this rectangle.</li>
-<li>Recursive binary partitions, i.e. sequentially we choose variable and corresponding split pint which achieve best fit until some stopping criterion is reached.</li>
-<li>Here: Regression, but also used for classification (with different criteria)</li>
-<li>Example [cf blackboard]</li>
+<li>One of the most powerful learning ideas</li>
+<li>Originally for classification problems, but extended to regression settings</li>
+<li>Idea: Combining the output of many &quot;weak&quot; classifiers to produce a powerful committee</li>
+<li>Weak classifier: classifier which error rate is only slightly better than random guessing.</li>
+<li>&quot;best off-the-shelf classifier in the world&quot; (Breiman, 1998)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees">
-
-<p>\(n\) observations \((x_i,y_i), i=1,\ldots,n, \quad x_i=(x_{i1}, \ldots, x_{ip})\)</p>
-
-<p>Given a partition into \(M\) regions \(R_1,\ldots,R_M\) with a fitted constant in each region:</p>
-
-<p>\[ f(x) = \sum_{m=1}^M c_m I(x \in R_m) \]</p>
-
-<p>Minimizing the residual sum of squares (RSS) \(\sum_{x_i \in R_m} (y_i-f(x_i))^2\) leads to \(\hat{c}_m=ave(y_i|x_i \in R_m)\)</p>
-
-<p>Finding the best partition in terms of minimal RSS is generally computational infeasible.</p>
-
-<p>Instead: greedy algorithm</p>
-
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-1">
-
-<p><strong>Algorithm:</strong></p>
-
-<p>Start with all data<br/>1. We consider a splitting variable \(j\) and split point \(s\), s.t.\[ \min_{j, s} \left[ \min_{c_1} \sum_{x_i \in R_1(j,s)} (y_i-c_1)^2 
-    + \min_{c_2} \sum_{x_i \in R_2(j,s)} (y_i-c_2)^2 \right] \]with \(R_1(j,s)=\{ X|X_j \leq s \}\), \(R_2(j,s)=\{ X|X_j &gt; s \}\)<br/>Determination of the best pair \((j,s)\) is feasible.<br/>2. Repeat 1) on each of the two resulting regions<br/>3. Stop when some criterion is reached</p>
-
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-2">
-
-<p>How large should we grow a tree?</p>
-
-<p>Tree size is a tuning parameter governing the model&#39;s complexity.</p>
-
-<p>It should be chosen adaptively from the data.</p>
-
-<p>Strategy 1: Split tree node only, if decrease in rss is sufficiently high (but too short-sighted)</p>
-
-<p>Strategy 2: (preferred)</p>
+</article></slide><slide class=''><hgroup><h2>Boosting for Classification</h2></hgroup><article  id="boosting-for-classification">
 
 <ul>
-<li>Given a large tree, stopping when some minimal node size is reached<br/></li>
-<li>Prune the tree by <em>cost-complexity pruning</em></li>
+<li>Freund and Schapire (1997): AdaBoost.M1</li>
+<li>Output variable \(Y \in \{-1,1\}\), \(X\) predictor variable, \(N\) observations (training sample)</li>
+<li>\(G(x)\): classification rule with values in \(\{-1,1\}\)</li>
+<li>Training error rate: \(\bar{err}=1/N \sum_{i=1}^N I(y_i \neq G(x_i))\)</li>
+<li>Expected error rate (on new observations): \(\mathbb{E}_{XY}I(Y\neq G(X))\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-3">
-
-<p>Subtree \(T \subset T_0\) is any tree that can be obtained by pruning \(T_0\), i.e. collapsing any number of its internal nodes.We denote the terminal nodes by \(m=1,\ldots,M\).</p>
-
-<p>\(N_m=|\{x_i \in R_m\}|\)</p>
-
-<p>\(\hat{c}_m = 1/N_m \sum_{x_i in R_m} y_i\)</p>
-
-<p>\(Q_m(T) = \sum_{x_i in R_m} (y_i - \hat{c}_m)^2\)</p>
-
-<p>Cost-complexity criterion \(C_{\alpha}(T)=\sum_{m=1}^{M} N_m Q_m(T) + \alpha |T|\)</p>
-
-</article></slide><slide class=''><hgroup><h2>Regression Trees</h2></hgroup><article  id="regression-trees-4">
-
-<p>Find \(T_{\alpha} \subset T_0\) to minimize \(C_{\alpha}(T)\)</p>
-
-<p>\(\alpha\) governs the trade-off between tree-size and its goodness of fit to the data.<br/>\(\alpha=0\) yields full tree.</p>
-
-<p>Choice of \(\alpha\) by cross validation.</p>
-
-<p>Final tree \(T_{\hat{\alpha}}\)</p>
-
-</article></slide><slide class=''><hgroup><h2>Bagging</h2></hgroup><article  id="bagging">
+</article></slide><slide class=''><hgroup><h2>Boosting for Classification </h2><h3> Main idea</h3></hgroup><article  id="boosting-for-classification-main-idea">
 
 <ul>
-<li>Bagging: Bootstrap aggregation or bagging averages</li>
-<li>Training data \(Z=\{(x_1,y_1),\ldots,(x_n,y_n)\}\)</li>
-<li>Fit a model to \(Z\) and obtain \(\hat{f}(x)\)</li>
-<li>Idea: average the predictions over a collection of bootstrap samples, thereby reducing its variance</li>
-<li></li>
-<li>\(Z^{*b}, b=1,\ldots,B\) bootstrap samples</li>
-<li>Fit model to get \(\hat{f}^{*,b}(x)\)</li>
-<li>\(\hat{f}_{bag}(x)=1/B \sum_{b=1}^B \hat{f}^{*,b}(x)\)</li>
+<li>Sequentially applying the weak classification algorithm to repeatedly modified versions of the data.</li>
+<li>This produces a sequence of weak classifiers \(G_m(x), m=1,\ldots,M\)</li>
+<li>Finally, the predictions of all of them are then combined thorugh a weighted majority vote to produce the final prediction:\[ G(x)=sign \left( \sum_{m=1}^M \alpha_m G_m(x) \right)\]</li>
+<li>Weights \(\alpha_1,\ldots, \alpha_M\) computed by boosting. Higher influence to the more accurate classifiers in the sequence.</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Bagging</h2></hgroup><article  id="bagging-1">
+</article></slide><slide class=''><hgroup><h2>Boosting for Classification </h2><h3> Main idea | Weights</h3></hgroup><article  id="boosting-for-classification-main-idea-weights">
 
 <ul>
-<li>\(\hat{f}_{bag}(x)\) estimate of the true bagging value \(E_{\hat{\mathcal{P}}} \hat{f}^{*}(x)\)</li>
-<li>Well suited for high-variance, low-bias procedures</li>
-<li>Application: regression trees</li>
+<li>Boosting applies different weights \(w_1, \ldots, w_N\) to the training data at each step.</li>
+<li>Initially, \(w_i=1/N\)</li>
+<li>For \(m=2,\ldots,M\) observations weights are indiviudally modified and classifier is reapplied to weighted data.</li>
+<li>At step \(m\) those observations that were misclassified by the classifier \(G_{m-1}(x)\) at the previous step have their weight increased, the weights for the correctly classified ones are decreased.</li>
+<li>Concentration on the training observations missed in the previous rounds.</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Random Forests</h2></hgroup><article  id="random-forests">
+</article></slide><slide class=''><hgroup><h2>Boosting for Classification </h2><h3> Algorithm</h3></hgroup><article  id="boosting-for-classification-algorithm">
+
+<ol>
+<li>Initialize the observation weights \(w_i=1/N\)</li>
+<li>For \(m=1\) to \(M\):
 
 <ul>
-<li>Introduced by Breiman (2001)</li>
-<li>Very powerful (good performance) in many applications</li>
-<li>Modified version of bagging</li>
-<li>Idea: Building a large collection of de-correlated trees and then average them (Breiman, 2001)</li>
+<li>Fit a classifier \(G_m(x)\) to the training data using weights \(w_i\)</li>
+<li>Compute \(err_m = \frac{\sum_{i=1}^N w_i I(y_i \neq G_m(x_i))}{\sum_{i=1}^N w_i }\)</li>
+<li>Compute \(\alpha_m = \log((1-err_m)/err_m)\)</li>
+<li>Set \(w_i \leftarrow w_i \exp[\alpha_m I(y_i\neq G_m(x_i))]\)</li>
+</ul></li>
+<li>Output \(G(x)=sign\left[\sum_{m=1}^M \alpha_m G_m(x)\right]\)</li>
+</ol>
+
+</article></slide><slide class=''><hgroup><h2>Boosting as Additive Modelling</h2></hgroup><article  id="boosting-as-additive-modelling">
+
+<ul>
+<li>Boosting is a way of fitting an additive expansion in a set of elementary &quot;basis&quot; functions.</li>
+<li>Basis function expansion\[f(x) = \sum_{m=1}^M \beta_m b(x; \gamma_m)\]where \(\beta_m\) are expansion coefficients and \(b(x;\gamma)\) simple functions / basis functions parametrized by \(\gamma\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Random Forests</h2></hgroup><article  id="random-forests-1">
+</article></slide><slide class=''><hgroup><h2>Boosting as Additive Modelling</h2></hgroup><article  id="boosting-as-additive-modelling-1">
 
 <ul>
-<li>Trees: low bias, but very noisy / high variance \(\Rightarrow\) goal : reduction of variance</li>
-<li>Trees generated by bagging are identically distributed, but not necessarily independent</li>
-<li>For identical distributed variables with positive pairwise correlation \(\rho\): variance of average \(\rho \sigma^2 + (1-\rho)/B \sigma^2\) (\(\rho\) correlation of the trees) (for i.i.d. rvs: \(\sigma^2/B\))</li>
-<li>Application: nonlinear estimators like random trees</li>
+<li>Estimation by solving\[ \min_{\beta_m, \gamma_m} \sum_{i=1}^N L \left( y_i, \sum_{m=1}^M \beta_m b (x_i; \gamma_m) \right) (*)\]</li>
+<li>Often hard to solve, but often feasible subproblem\[ \min_{\beta, \gamma} \sum_{i=1}^N L(y_i; \beta b(x_i; \gamma))\]</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Random Forests </h2><h3> Procedure</h3></hgroup><article  id="random-forests-procedure">
+</article></slide><slide class=''><hgroup><h2>Forward Stagewise Additive Modeling</h2></hgroup><article  id="forward-stagewise-additive-modeling">
 
 <ul>
-<li>Bootstrap samples \(1,\ldots,B\)</li>
-<li>Build trees and<br/>&quot;Before each split, select \(m \leq p\) of the input variables at random as candidates for splitting&quot; (e.g. \(m=\sqrt{p}, m=1\))</li>
-<li>Aggregation:\[\hat{f}_{rf}(x) = \frac{1}{B} \sum_{b=1}^B T(x; \Theta_b)\]\(\Theta_b\): split variables, cut points, terminal node values for \(b\)</li>
+<li>Idea: Solving (*) by sequentially adding new basis functions to the expansion without adjusting the parameters and coefficients of those already added.</li>
+<li>At each step \(m\): Solve for the optimal \(\beta_m\) and \(b(x; \gamma_m)\) given the current expansion \(f_{m-1}(x)\); this gives \(f_m(x)\) and continue.</li>
+<li>For squared-error loss:\[ L(y_i; f_{m-1}(x_i) + \beta b(x_i;\gamma)) = (y_i - f_{m-1}(x_i) - \beta b(x_i; \gamma))^2 \]</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Ensemble Learning </h2><h3> Introduction</h3></hgroup><article  id="ensemble-learning-introduction">
+</article></slide><slide class=''><hgroup><h2>Forward Stagewise Additive Modeling </h2><h3> Algorithm</h3></hgroup><article  id="forward-stagewise-additive-modeling-algorithm">
+
+<ol>
+<li>Initialize \(f_0(x)=0\)</li>
+<li>For \(m=1\) to \(M\):</li>
+</ol>
 
 <ul>
-<li>Idea: To build a prediction model by combing the strengths of a collection of simpler base models.</li>
-<li>Bagging, random forests are ensemble methods for classification, where a committee of trees each cast a vote for predicted class.</li>
-<li>Boosting proposed as a committee method where the committee of weak learners evolves over time with a weighted vote for the members</li>
-<li>Ensemble learning<br/></li>
-<li>Developing a population of base learners from the training data<br/></li>
-<li>Combining them to form the composite predictor</li>
+<li>Compute\[ (\beta_m, \gamma_m) = \arg \min_{\beta, \gamma} \sum_{i=1}^NL(y_i, f_{m-1}(x_i) + \beta b(x_i;\gamma)).\]</li>
+<li>Set \(f_m(x)=f_{m-1}(x) + \beta_m b(x;\gamma_m)\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Learning Ensembles</h2></hgroup><article  id="learning-ensembles">
+</article></slide><slide class=''><hgroup><h2>Exponential Loss and AdaBoost</h2></hgroup><article  id="exponential-loss-and-adaboost">
 
 <ul>
-<li>We consider functions of the form\[ f(x) = \alpha_0 + \sum_{T_k \in \mathcal{T}} \alpha_k T_k(x) \]with \(\mathcal{T}\) dictionary of basis functions, e.g. trees with \(|\mathcal{T}|\) quite large.<br/></li>
-<li>Hybrid approach of Friedman and Popescu (2003)<br/></li>
-<li>A finite dictionary \(\mathcal{T}_L=\{T_1(x),\ldots, T_M(x)\}\) of basis functions is induced from the training data.<br/></li>
-<li>A family of functions \(f_{\lambda}(x)\) is built by fitting a lasso path in this dictionary\[ \alpha(\lambda) = argmin_{\alpha} \sum_{i=1}^N L[y_i, \alpha_0 + \sum_{m=1}^M \alpha_, T_m(x_i)] + \lambda \sum_{m=1}^M   |\alpha_m|\]</li>
+<li>AdaBoost as stagewise additive modeling using the loss function \(L(y, f(x))=\exp(-yf(x))\)</li>
+<li>Solve\[ (\beta_m, G_m) = \arg \min_{\beta, G} \sum exp[-y_i(f_{m-1}(x_i) + \beta G(x_i))] \]</li>
+<li>This can be expressed as\[ (\beta_m, G_m) = \arg \min_{\beta, G} w_i^{(m)} \exp(-\beta y_i G(x_i))\]with \(w_i^{(m)}=\exp(-y_i f_{m-1}(x_i))\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Ensemble Generating Algorithm</h2></hgroup><article  id="ensemble-generating-algorithm">
-
-<p>How to choose the set of base functions \(b(x;\gamma)\) forming \(\mathcal{T}_L\)?</p>
+</article></slide><slide class=''><hgroup><h2>Exponential Loss and AdaBoost</h2></hgroup><article  id="exponential-loss-and-adaboost-1">
 
 <ul>
-<li>\(f_0(x)=\arg \min_c \sum_{i=1}^N L(y_i,c)\)</li>
-<li>For \(m=1\) to \(M\) do<br/></li>
-<li>\(\gamma_m = \arg \min_{\gamma} \sum_{i \in S_m(\eta)} L(y_i, f_{m-1}(x_i) + b(x_i;\gamma))\)<br/></li>
-<li>\(f_m(x)=f_{m-1}(x) + \nu b(x;\gamma_m)\)<br/></li>
-<li>\(\mathcal{T}_{ISLE}=\{ b(x;\gamma_1), \ldots, b(x;\gamma_M) \}\)</li>
+<li>Solution can be obtained in two steps.</li>
 </ul>
 
-<p>\(S_m(\eta)\) refers to a subsample of \(N \eta\) of the training observations, typically without replacement.<br/>Recommendation: \(\eta \leq 1/2\) and \(\eta \sim 1/\sqrt(N)\), \(\nu=0.1\)<br/><em>Importance sampled learning ensemble (ISLE)</em></p>
+<ol>
+<li>For any value of \(\beta &gt; 0\), the solution for \(G_m(x)\) is\[ G_m = \arg \min_G \sum_{i=1}^N w_i^{(m)}I(y_i\neq G(x_i))\]</li>
+</ol>
 
-</article></slide><slide class=''><hgroup><h2>Special cases of the Algorithm</h2></hgroup><article  id="special-cases-of-the-algorithm">
+</article></slide><slide class=''><hgroup><h2>Exponential Loss and AdaBoost</h2></hgroup><article  id="exponential-loss-and-adaboost-2">
+
+<ol>
+<li>Pluggin this \(G_m\) into the criterion function and solving for \(\beta\) gives:\[ \beta_m=1/2 \log \frac{1-err_m}{err_m},\] where \(err_m\) is the minimized weighted error rate\[ err_m = \frac{\sum_{i}w_i^{(m)} I(y_i \neq G_m(x_i))}{\sum_{i}w_i^{(m)}}\]</li>
+</ol>
+
+</article></slide><slide class=''><hgroup><h2>Exponential Loss and AdaBoost</h2></hgroup><article  id="exponential-loss-and-adaboost-3">
 
 <ul>
-<li>Bagging: \(\eta=1\), samples with replacement, \(\nu=0\)</li>
-<li>Random forest: sampling is similar with more randomness introduced by the selection of the splitting variable.</li>
-<li>Gradient boosting with shrinkage uses \(\eta=1\)</li>
-<li>Stochastic gradient boosting: identical</li>
+<li>Update is given by \(f_m(x)=f_{m-1}(x) + \beta_m G_m(x)\) and weights \(w_i^{(m)}=w_i^{(m)} exp(-\beta_m y_i G_m(x_i))\)</li>
+<li>Weights can be rewriten as \(w_i^{(m+1)}=w_i^{(m)} exp(\alpha_m I(y_i \neq G_m(x_i))) exp(-\beta_m)\)</li>
+<li>\(\alpha_m=2 \beta_m\)</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Remarks on the Loss Function </h2><h3> Classification</h3></hgroup><article  id="remarks-on-the-loss-function-classification">
+
+<ul>
+<li>\(yf(x)\) is called margin. Goal: maximize margin.</li>
+<li>Classification rule: \(G(x)=sign(f(x))\)</li>
+<li>Exponential loss:</li>
+<li>Computational easy (simple modular reweighting)</li>
+<li>\(f^*(x)=\arg \min_{f(x)} E_{Y|x}(e^{-Yf(x)})=1/2 \log \frac{Pr(Y=1|x)}{Pr(Y=-1|x)}\) or equivalently\(Pr(y=1|x)=\frac{1}{1+e^{-2f^*(x)}}\)</li>
+<li>Hence, AdaBoost estimates one half of the log-odd of \(P(Y=1|x)\)</li>
+<li>Alternative; binomial negative log-likelihood or deviance (coded \(\{0,1\}\)) has the same population minimizer.</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Remarks on the Loss Function </h2><h3> Regression Case</h3></hgroup><article  id="remarks-on-the-loss-function-regression-case">
+
+<ul>
+<li>Squared error loss: \(L(y,f(x))=(y-f(x))^2\) with population minimizer \(f(x)=E[Y|x]\)</li>
+<li>Mean absolute loss: \(L(y,f(x))=|y-f(x)|\) with population minimizer \(f(x)=median[Y|x]\)</li>
+<li>Huber Loss: \(L(y,f(x))=1(|y-f(x)|\leq \delta)(y-f(x))^2 +\)\(+1(|y-f(x)|&gt; \delta) (2\delta|y-f(x)|-\delta^2)\)</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Boosting Trees</h2></hgroup><article  id="boosting-trees">
+
+<ul>
+<li>Trees: Partition of the space of all joint predictors into disjoint regions \(R_j\) (terminal nodes of the tree) with\[ x \in R_j \rightarrow f(x) = \gamma_j\]</li>
+<li>Trees can be expressed as \(T(x;\Theta)=\sum_{j=1}^J \gamma_j I(x \in R_j)\) with parameters \(\Theta=\{R_j,\gamma_j\}_1^J\)</li>
+<li>Ususally estimated via recursive partitioning</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Boosting Trees</h2></hgroup><article  id="boosting-trees-1">
+
+<ul>
+<li>Boosted tree model: \(f_M(x)=\sum_{m=1}^M T(x;\Theta_m)\)</li>
+<li>Forward stagewise procedure solves:\[\hat{\Theta}_m = \arg \min_{\Theta_m} \sum_{i=1}^N L(y_i, f_{m-1}(x_i) + T(x_i;\Theta_m))\]</li>
+<li>Simplification with squared-error loss and two-class classification with expoential loss (specialized tree-growing algorithm)</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Numerical Optimization via Gradient Boosting</h2></hgroup><article  id="numerical-optimization-via-gradient-boosting">
+
+<ul>
+<li>Goal: approximate algorithms for solving \(\hat{\Theta}_m = \arg \min_{\Theta_m} \sum_i L(y_i, f_{m-1}(x_i)+T(x_i;\Theta_m))\)</li>
+<li>Loss to predict \(y\) using \(f(x)\): \(L(f)=\sum_i L(y_i;f(x_i))\) (e.g. \(f\) as sum of trees)</li>
+<li>\(\hat{f}= \arg \min_f L(f)\) (**) where the &quot;parameters&quot; \(f \in \mathbb{R}^N\) are the values of the approximating function \(f(x_i)\) at each of the N data points \(x_i\).</li>
+<li>Numerical optimizuation procedures solve (**) as as sum of component vectors \(f_M=\sum_{m=0}^M h_m, h_m \in \mathbb{R}^N\) and \(h_0\) starting value / initial guess.</li>
+<li>Numerical methods differ in how to specify \(h_m\)</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Gradient Boosting </h2><h3> Steepest Descent</h3></hgroup><article  id="gradient-boosting-steepest-descent">
+
+<ul>
+<li>\(h_m= \rho_m g_m\) (steepest descent) with \(\rho_m\) scala and \(g_m \in \mathbb{R}^N\) is the gradient of \(L(f)\) evaluated at \(f=f_{m-1}\)</li>
+<li>\(g_{im}=\left[ \frac{\partial L(y_i,f(x_i))}{\partial f(x_i)} \right]_{f(x_i)=f_{m-1}(x_i)}\)</li>
+<li>Step length \(\rho_m\) solves\[\rho_m= \arg \min_{\rho} L(f_{m-1}-\rho g_m)\]</li>
+<li>Updating: \(f_m=f_{m-1}- \rho g_m\)</li>
+<li><strong>Greedy Strategy</strong></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Gradient Boosting</h2></hgroup><article  id="gradient-boosting">
+
+<ul>
+<li>Gradient is the unconstrained maximal descent direction. Only defined at the training data points \(x_i\), but goal is generalization.</li>
+<li>Idea: Approximate negative gradient by some &quot;model&quot;, e.g. tree \(T(x;\Theta_m)\) at \(m\)th iteration whose predictions \(t_m\) are as close as poiisble to the negative gradient.</li>
+<li>This leads to\[ \tilde{\Theta}_m = \arg \min_{\Theta} \sum_i (-g_{im}-T(x_i;\Theta))^2.\]</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Gradient Tree Boosting Algorithm</h2></hgroup><article  id="gradient-tree-boosting-algorithm">
+
+<ol>
+<li>Initialize \(f_0(x)=\arg \min_{\gamma} \sum_i L(y_i, \gamma)\)</li>
+<li>For \(m=1\) to \(M\):
+
+<ul>
+<li>For \(i=1,2,\ldots,N\) compute$$ r_{im} = - <em>{f=f</em>{m-1}}.</li>
+<li>Fit a regression tree to the targets \(r_{im}\) giving terminal regions \(R_{jm}, j=1,2,\ldots, J_m\).</li>
+<li>For \(j=1,2,\ldots, J_m\) compute\[ \gamma_{jm} = \arg \min_{\gamma} \sum_{x_i \in R_{jm}} L(y_i, f_{m-1}(x_i) + \gamma).\]</li>
+<li>Update \(f_m(x)=f_{m-1}(x) + \sum_{j=1}^{J_m} \gamma_{jm}I(x \in R_{jm})\).</li>
+</ul></li>
+<li>Output \(\hat{f}(x)=f_M(x)\)</li>
+</ol>
+
+</article></slide><slide class=''><hgroup><h2>Remarks</h2></hgroup><article  id="remarks">
+
+<ul>
+<li>Shrinkage: \(f_m(x)=f_{m-1}(x) + \nu \sum_{j=1}^J \gamma_{jm}I(x \in R_{jm})\)</li>
+<li>Size of trees \(J\) in each step: important choice, usually \(2 &lt; J &lt; 10\) (by experimenting)</li>
+<li>Early stopping required. (When to stop?)</li>
+<li>Penalization / tuning parameters: \(M\), \(J\), \(\nu\)</li>
 </ul></article></slide>
 
 
