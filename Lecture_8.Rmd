@@ -3,8 +3,8 @@ title: "Lecture 8 -- Boosting"
 author: "Martin Spindler"
 date: '`r format(Sys.Date())`'
 output:
-  beamer_presentation: default
   ioslides_presentation: null
+  beamer_presentation: default
   keep_tex: yes
   mathjax: local
   self_contained: no
@@ -28,14 +28,14 @@ output:
 ## Boosting for Classification | Main idea
 * Sequentially applying the weak classification algorithm to repeatedly modified versions of the data.
 * This produces a sequence of weak classifiers $G_m(x), m=1,\ldots,M$
-* Finally, the predictions of all of them are then combined thorugh a weighted majority vote to produce the final prediction:
+* Finally, the predictions of all of them are then combined through a weighted majority vote to produce the final prediction:
 $$ G(x)=sign \left( \sum_{m=1}^M \alpha_m G_m(x) \right)$$
 * Weights $\alpha_1,\ldots, \alpha_M$ computed by boosting. Higher influence to the more accurate classifiers in the sequence.
 
 ## Boosting for Classification | Main idea | Weights
 * Boosting applies different weights $w_1, \ldots, w_N$ to the training data at each step.
 * Initially, $w_i=1/N$
-* For $m=2,\ldots,M$ observations weights are indiviudally modified and classifier is reapplied to weighted data.
+* For $m=2,\ldots,M$ observations weights are individually modified and classifier is reapplied to weighted data.
 * At step $m$ those observations that were misclassified by the classifier $G_{m-1}(x)$ at the previous step have their weight increased, the weights for the correctly classified ones are decreased.
 * Concentration on the training observations missed in the previous rounds.
 
@@ -87,13 +87,13 @@ with $w_i^{(m)}=\exp(-y_i f_{m-1}(x_i))$
 $$ G_m = \arg \min_G \sum_{i=1}^N w_i^{(m)}I(y_i\neq G(x_i))$$
 
 ## Exponential Loss and AdaBoost
-2. Pluggin this $G_m$ into the criterion function and solving for $\beta$ gives:
+2. Plugin this $G_m$ into the criterion function and solving for $\beta$ gives:
 $$ \beta_m=1/2 \log \frac{1-err_m}{err_m},$$ where $err_m$ is the minimized weighted error rate
 $$ err_m = \frac{\sum_{i}w_i^{(m)} I(y_i \neq G_m(x_i))}{\sum_{i}w_i^{(m)}}$$
 
 ## Exponential Loss and AdaBoost
 * Update is given by $f_m(x)=f_{m-1}(x) + \beta_m G_m(x)$ and weights $w_i^{(m)}=w_i^{(m)} exp(-\beta_m y_i G_m(x_i))$
-* Weights can be rewriten as $w_i^{(m+1)}=w_i^{(m)} exp(\alpha_m I(y_i \neq G_m(x_i))) exp(-\beta_m)$
+* Weights can be rewritten as $w_i^{(m+1)}=w_i^{(m)} exp(\alpha_m I(y_i \neq G_m(x_i))) exp(-\beta_m)$
 * $\alpha_m=2 \beta_m$
 
 ## Remarks on the Loss Function | Classification
@@ -116,23 +116,23 @@ $+1(|y-f(x)|> \delta) (2\delta|y-f(x)|-\delta^2)$
 * Trees: Partition of the space of all joint predictors into disjoint regions $R_j$ (terminal nodes of the tree) with
 $$ x \in R_j \rightarrow f(x) = \gamma_j$$
 * Trees can be expressed as $T(x;\Theta)=\sum_{j=1}^J \gamma_j I(x \in R_j)$ with parameters $\Theta=\{R_j,\gamma_j\}_1^J$
-* Ususally estimated via recursive partitioning
+* Usually estimated via recursive partitioning
 
 ## Boosting Trees
 * Boosted tree model: $f_M(x)=\sum_{m=1}^M T(x;\Theta_m)$
 * Forward stagewise procedure solves:
 $$\hat{\Theta}_m = \arg \min_{\Theta_m} \sum_{i=1}^N L(y_i, f_{m-1}(x_i) + T(x_i;\Theta_m))$$
-* Simplification with squared-error loss and two-class classification with expoential loss (specialized tree-growing algorithm)
+* Simplification with squared-error loss and two-class classification with exponential loss (specialized tree-growing algorithm)
 
 ## Numerical Optimization via Gradient Boosting
 * Goal: approximate algorithms for solving $\hat{\Theta}_m = \arg \min_{\Theta_m} \sum_i L(y_i, f_{m-1}(x_i)+T(x_i;\Theta_m))$
 * Loss to predict $y$ using $f(x)$: $L(f)=\sum_i L(y_i;f(x_i))$ (e.g. $f$ as sum of trees)
 * $\hat{f}= \arg \min_f L(f)$ (**) where the "parameters" $f \in \mathbb{R}^N$ are the values of the approximating function $f(x_i)$ at each of the N data points $x_i$.
-* Numerical optimizuation procedures solve (**) as as sum of component vectors $f_M=\sum_{m=0}^M h_m, h_m \in \mathbb{R}^N$ and $h_0$ starting value / initial guess.
+* Numerical optimization procedures solve (**) as as sum of component vectors $f_M=\sum_{m=0}^M h_m, h_m \in \mathbb{R}^N$ and $h_0$ starting value / initial guess.
 * Numerical methods differ in how to specify $h_m$
 
 ## Gradient Boosting | Steepest Descent
-* $h_m= \rho_m g_m$ (steepest descent) with $\rho_m$ scala and $g_m \in \mathbb{R}^N$ is the gradient of $L(f)$ evaluated at $f=f_{m-1}$
+* $h_m= \rho_m g_m$ (steepest descent) with $\rho_m$ scalar and $g_m \in \mathbb{R}^N$ is the gradient of $L(f)$ evaluated at $f=f_{m-1}$
 * $g_{im}=\left[ \frac{\partial L(y_i,f(x_i))}{\partial f(x_i)} \right]_{f(x_i)=f_{m-1}(x_i)}$
 * Step length $\rho_m$ solves
 $$\rho_m= \arg \min_{\rho} L(f_{m-1}-\rho g_m)$$
@@ -141,7 +141,7 @@ $$\rho_m= \arg \min_{\rho} L(f_{m-1}-\rho g_m)$$
 
 ## Gradient Boosting
 * Gradient is the unconstrained maximal descent direction. Only defined at the training data points $x_i$, but goal is generalization.
-* Idea: Approximate negative gradient by some "model", e.g. tree $T(x;\Theta_m)$ at $m$th iteration whose predictions $t_m$ are as close as poiisble to the negative gradient.
+* Idea: Approximate negative gradient by some "model", e.g. tree $T(x;\Theta_m)$ at $m$th iteration whose predictions $t_m$ are as close as possible to the negative gradient.
 * This leads to
 $$ \tilde{\Theta}_m = \arg \min_{\Theta} \sum_i (-g_{im}-T(x_i;\Theta))^2.$$
 
@@ -149,7 +149,7 @@ $$ \tilde{\Theta}_m = \arg \min_{\Theta} \sum_i (-g_{im}-T(x_i;\Theta))^2.$$
 1. Initialize $f_0(x)=\arg \min_{\gamma} \sum_i L(y_i, \gamma)$
 2. For $m=1$ to $M$:
        + For $i=1,2,\ldots,N$ compute
- $$ r_{im} = - \left[ \frac{\partial L(y_i, f(x_i))}{\partial f(x_i)} \right]_{f=f_{m-1}}.
+ $$ r_{im} = - \left[ \frac{\partial L(y_i, f(x_i))}{\partial f(x_i)} \right]_{f=f_{m-1}}.$$
        + Fit a regression tree to the targets $r_{im}$ giving terminal regions $R_{jm}, j=1,2,\ldots, J_m$.
        + For $j=1,2,\ldots, J_m$ compute
  $$ \gamma_{jm} = \arg \min_{\gamma} \sum_{x_i \in R_{jm}} L(y_i, f_{m-1}(x_i) + \gamma).$$

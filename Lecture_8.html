@@ -10,7 +10,7 @@
 
 
 
-  <meta name="date" content="2016-04-14" />
+  <meta name="date" content="2016-04-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,7 +89,7 @@
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2016-04-14</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2016-04-15</p>
           </hgroup>
   </slide>
 
@@ -118,7 +118,7 @@
 <ul>
 <li>Sequentially applying the weak classification algorithm to repeatedly modified versions of the data.</li>
 <li>This produces a sequence of weak classifiers \(G_m(x), m=1,\ldots,M\)</li>
-<li>Finally, the predictions of all of them are then combined thorugh a weighted majority vote to produce the final prediction:\[ G(x)=sign \left( \sum_{m=1}^M \alpha_m G_m(x) \right)\]</li>
+<li>Finally, the predictions of all of them are then combined through a weighted majority vote to produce the final prediction:\[ G(x)=sign \left( \sum_{m=1}^M \alpha_m G_m(x) \right)\]</li>
 <li>Weights \(\alpha_1,\ldots, \alpha_M\) computed by boosting. Higher influence to the more accurate classifiers in the sequence.</li>
 </ul>
 
@@ -127,7 +127,7 @@
 <ul>
 <li>Boosting applies different weights \(w_1, \ldots, w_N\) to the training data at each step.</li>
 <li>Initially, \(w_i=1/N\)</li>
-<li>For \(m=2,\ldots,M\) observations weights are indiviudally modified and classifier is reapplied to weighted data.</li>
+<li>For \(m=2,\ldots,M\) observations weights are individually modified and classifier is reapplied to weighted data.</li>
 <li>At step \(m\) those observations that were misclassified by the classifier \(G_{m-1}(x)\) at the previous step have their weight increased, the weights for the correctly classified ones are decreased.</li>
 <li>Concentration on the training observations missed in the previous rounds.</li>
 </ul>
@@ -202,14 +202,14 @@
 </article></slide><slide class=''><hgroup><h2>Exponential Loss and AdaBoost</h2></hgroup><article  id="exponential-loss-and-adaboost-2">
 
 <ol>
-<li>Pluggin this \(G_m\) into the criterion function and solving for \(\beta\) gives:\[ \beta_m=1/2 \log \frac{1-err_m}{err_m},\] where \(err_m\) is the minimized weighted error rate\[ err_m = \frac{\sum_{i}w_i^{(m)} I(y_i \neq G_m(x_i))}{\sum_{i}w_i^{(m)}}\]</li>
+<li>Plugin this \(G_m\) into the criterion function and solving for \(\beta\) gives:\[ \beta_m=1/2 \log \frac{1-err_m}{err_m},\] where \(err_m\) is the minimized weighted error rate\[ err_m = \frac{\sum_{i}w_i^{(m)} I(y_i \neq G_m(x_i))}{\sum_{i}w_i^{(m)}}\]</li>
 </ol>
 
 </article></slide><slide class=''><hgroup><h2>Exponential Loss and AdaBoost</h2></hgroup><article  id="exponential-loss-and-adaboost-3">
 
 <ul>
 <li>Update is given by \(f_m(x)=f_{m-1}(x) + \beta_m G_m(x)\) and weights \(w_i^{(m)}=w_i^{(m)} exp(-\beta_m y_i G_m(x_i))\)</li>
-<li>Weights can be rewriten as \(w_i^{(m+1)}=w_i^{(m)} exp(\alpha_m I(y_i \neq G_m(x_i))) exp(-\beta_m)\)</li>
+<li>Weights can be rewritten as \(w_i^{(m+1)}=w_i^{(m)} exp(\alpha_m I(y_i \neq G_m(x_i))) exp(-\beta_m)\)</li>
 <li>\(\alpha_m=2 \beta_m\)</li>
 </ul>
 
@@ -238,7 +238,7 @@
 <ul>
 <li>Trees: Partition of the space of all joint predictors into disjoint regions \(R_j\) (terminal nodes of the tree) with\[ x \in R_j \rightarrow f(x) = \gamma_j\]</li>
 <li>Trees can be expressed as \(T(x;\Theta)=\sum_{j=1}^J \gamma_j I(x \in R_j)\) with parameters \(\Theta=\{R_j,\gamma_j\}_1^J\)</li>
-<li>Ususally estimated via recursive partitioning</li>
+<li>Usually estimated via recursive partitioning</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Boosting Trees</h2></hgroup><article  id="boosting-trees-1">
@@ -246,7 +246,7 @@
 <ul>
 <li>Boosted tree model: \(f_M(x)=\sum_{m=1}^M T(x;\Theta_m)\)</li>
 <li>Forward stagewise procedure solves:\[\hat{\Theta}_m = \arg \min_{\Theta_m} \sum_{i=1}^N L(y_i, f_{m-1}(x_i) + T(x_i;\Theta_m))\]</li>
-<li>Simplification with squared-error loss and two-class classification with expoential loss (specialized tree-growing algorithm)</li>
+<li>Simplification with squared-error loss and two-class classification with exponential loss (specialized tree-growing algorithm)</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Numerical Optimization via Gradient Boosting</h2></hgroup><article  id="numerical-optimization-via-gradient-boosting">
@@ -255,14 +255,14 @@
 <li>Goal: approximate algorithms for solving \(\hat{\Theta}_m = \arg \min_{\Theta_m} \sum_i L(y_i, f_{m-1}(x_i)+T(x_i;\Theta_m))\)</li>
 <li>Loss to predict \(y\) using \(f(x)\): \(L(f)=\sum_i L(y_i;f(x_i))\) (e.g. \(f\) as sum of trees)</li>
 <li>\(\hat{f}= \arg \min_f L(f)\) (**) where the &quot;parameters&quot; \(f \in \mathbb{R}^N\) are the values of the approximating function \(f(x_i)\) at each of the N data points \(x_i\).</li>
-<li>Numerical optimizuation procedures solve (**) as as sum of component vectors \(f_M=\sum_{m=0}^M h_m, h_m \in \mathbb{R}^N\) and \(h_0\) starting value / initial guess.</li>
+<li>Numerical optimization procedures solve (**) as as sum of component vectors \(f_M=\sum_{m=0}^M h_m, h_m \in \mathbb{R}^N\) and \(h_0\) starting value / initial guess.</li>
 <li>Numerical methods differ in how to specify \(h_m\)</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Gradient Boosting </h2><h3> Steepest Descent</h3></hgroup><article  id="gradient-boosting-steepest-descent">
 
 <ul>
-<li>\(h_m= \rho_m g_m\) (steepest descent) with \(\rho_m\) scala and \(g_m \in \mathbb{R}^N\) is the gradient of \(L(f)\) evaluated at \(f=f_{m-1}\)</li>
+<li>\(h_m= \rho_m g_m\) (steepest descent) with \(\rho_m\) scalar and \(g_m \in \mathbb{R}^N\) is the gradient of \(L(f)\) evaluated at \(f=f_{m-1}\)</li>
 <li>\(g_{im}=\left[ \frac{\partial L(y_i,f(x_i))}{\partial f(x_i)} \right]_{f(x_i)=f_{m-1}(x_i)}\)</li>
 <li>Step length \(\rho_m\) solves\[\rho_m= \arg \min_{\rho} L(f_{m-1}-\rho g_m)\]</li>
 <li>Updating: \(f_m=f_{m-1}- \rho g_m\)</li>
@@ -273,7 +273,7 @@
 
 <ul>
 <li>Gradient is the unconstrained maximal descent direction. Only defined at the training data points \(x_i\), but goal is generalization.</li>
-<li>Idea: Approximate negative gradient by some &quot;model&quot;, e.g. tree \(T(x;\Theta_m)\) at \(m\)th iteration whose predictions \(t_m\) are as close as poiisble to the negative gradient.</li>
+<li>Idea: Approximate negative gradient by some &quot;model&quot;, e.g. tree \(T(x;\Theta_m)\) at \(m\)th iteration whose predictions \(t_m\) are as close as possible to the negative gradient.</li>
 <li>This leads to\[ \tilde{\Theta}_m = \arg \min_{\Theta} \sum_i (-g_{im}-T(x_i;\Theta))^2.\]</li>
 </ul>
 
@@ -284,7 +284,7 @@
 <li>For \(m=1\) to \(M\):
 
 <ul>
-<li>For \(i=1,2,\ldots,N\) compute$$ r_{im} = - <em>{f=f</em>{m-1}}.</li>
+<li>For \(i=1,2,\ldots,N\) compute\[ r_{im} = - \left[ \frac{\partial L(y_i, f(x_i))}{\partial f(x_i)} \right]_{f=f_{m-1}}.\]</li>
 <li>Fit a regression tree to the targets \(r_{im}\) giving terminal regions \(R_{jm}, j=1,2,\ldots, J_m\).</li>
 <li>For \(j=1,2,\ldots, J_m\) compute\[ \gamma_{jm} = \arg \min_{\gamma} \sum_{x_i \in R_{jm}} L(y_i, f_{m-1}(x_i) + \gamma).\]</li>
 <li>Update \(f_m(x)=f_{m-1}(x) + \sum_{j=1}^{J_m} \gamma_{jm}I(x \in R_{jm})\).</li>
