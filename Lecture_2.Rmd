@@ -3,8 +3,8 @@ title: "Lecture 2 -- Linear Regression and Extensions"
 author: "Martin Spindler"
 date: '`r format(Sys.Date())`'
 output:
-  ioslides_presentation: null
   beamer_presentation: default
+  ioslides_presentation: null
   mathjax: local
   self_contained: no
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Linear Regression
 We start with a linear regression model:
 $$ y_i = x_i' \beta + \varepsilon_i, i=1, \ldots,n, $$
-where $x_i$ is a p-dimensional vector of regressors for observation $i$, $\beta$ a p-dimenisional coefficient vector, and $\varepsilon_i$ iid error terms with $\mathbb{E} [\varepsilon_i|x_i]= 0$.
+where $x_i$ is a p-dimensional vector of regressors for observation $i$, $\beta$ a p-dimensional coefficient vector, and $\varepsilon_i$ iid error terms with $\mathbb{E} [\varepsilon_i|x_i]= 0$.
 
 The ordinary least squares (ols) estimator for $\beta$ is defined as
 
@@ -47,7 +47,7 @@ $$ \hat{\beta} = (X'X)^{-1}X'y.$$
 
 ## Linear Regression
 
-Unter homoscedastic errors, i.e. $\mathbb{Var} \varepsilon_i=\sigma^2$, we have that
+Under homoscedastic errors, i.e. $\mathbb{Var} \varepsilon_i=\sigma^2$, we have that
 
 $$ \mathbb{Var}(\hat{\beta})= (X'X)^{-1} \sigma^2.$$
 
@@ -87,7 +87,7 @@ To make the linear specification more flexible, we might include higher-order po
 
   
 * Estimation by ols
-* Quite flexibel, but usually p=3 or p=4
+* Quite flexible, but usually p=3 or p=4
 * Higher order polynomials (p > 5) might lead to strange fits (overfitting), especially at the boundary.
 
 ## Extensions | Polynomial Regression - Example
@@ -130,8 +130,8 @@ legend("bottomright", c("Third order", "Fourth order", "Fifth order"),
 
 ## Extensions | Step Functions
 
-* Defintion: Step functions are functions which are constant on each part of a partition of the domain.
-* Univariate Regression: choosing $K$ cutpoints $c_1, \ldots, c_K$ and defining new auxiliary variables:  
+* Definition: Step functions are functions which are constant on each part of a partition of the domain.
+* Univariate Regression: choosing $K$ cut points $c_1, \ldots, c_K$ and defining new auxiliary variables:  
   $C_0(x)= 1(x < c_1)$, $C_1(x)=1(c_1 \leq x < c_2)$, $\ldots$, $C_K(x)=1(c_K \leq x)$
   * $1(\cdot)$ is the so-called indicator function which is $1$ is the condition is true and $0$ otherwise.
 * This gives us the following regression:

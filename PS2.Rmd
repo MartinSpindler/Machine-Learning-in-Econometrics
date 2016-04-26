@@ -12,7 +12,7 @@ knitr::opts_chunk$set(error = TRUE)
 
 
 ## Loading and Exploring the Data Set
-For this problem set we will analyze the data set *Boston* which is contained in the library *MASS*. This data set records the median house value (*medv*) for $506$ neighbourhoods around Boston. The goal is to predict the variable *medv* using $13$ predictors.
+For this problem set we will analyze the data set *Boston* which is contained in the library *MASS*. This data set records the median house value (*medv*) for $506$ neighborhoods around Boston. The goal is to predict the variable *medv* using $13$ predictors.
 
 * Load the data set.
 * Make yourself familiar with the data.  Hint: *str()*, *names()*, *help()*
@@ -48,7 +48,7 @@ predict(reg1, newdata = list(lstat=32), interval="confidence")
 ## Multivariate Linear Regression
 * Fit now a multivariate regression.
 * Interpret the results, in particular with a focus on the variable *lstat*.
-* Fit a more complex model, e.g. considering interaction effects and higher order polyomials.
+* Fit a more complex model, e.g. considering interaction effects and higher order polynomials.
 ```{r}
 reg2 = lm(medv ~ ., data=Boston)
 summary(reg2)

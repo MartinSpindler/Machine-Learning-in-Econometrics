@@ -99,7 +99,7 @@ for $\beta$ is $N(0, \tau^2 I_p)$, and the distribution of $\varepsilon_i$ is no
 Linear model: $y_i=\sum_{j=1}^p \beta_j X_i^{(j)} + \varepsilon_i, i=1,\ldots,n$, 
 $\varepsilon_i,\ldots, \varepsilon_n$ i.i.d., independent of $\{X_i, i=1,\ldots,n\}$ and $\mathbb{E} [\varepsilon_i]=0$ and $\mathbb{V} [\varepsilon_i]=\sigma^2$  
             
-Wlog: intercept is zero and covariates are centred and on the same (unit) scale.  
+Wlog: intercept is zero and covariates are centered and on the same (unit) scale.  
           
 Now: $p \gg n$
             
@@ -110,7 +110,7 @@ Problem: ols estimator not unique and overfit of the data
 The Lasso estimator is given by
 $$ \hat{\beta}(\lambda)=\arg \min_{\beta \in \mathbb{R}^p} \left(||Y-X\beta||_2^2/n + \lambda ||\beta||_1 \right) (*) $$
             
-$||Y-X\beta||_2^2=\sum_{i=1}^n (Y_i - (X\beta)_i)^2$, $|| \beta||_1 = \sum_{j=1}^p |\beta_j|$, $\lambda \geq 0$ penalisation parameter
+$||Y-X\beta||_2^2=\sum_{i=1}^n (Y_i - (X\beta)_i)^2$, $|| \beta||_1 = \sum_{j=1}^p |\beta_j|$, $\lambda \geq 0$ penalization parameter
           
 ## Lasso Regression
           

@@ -32,7 +32,7 @@ install.packages("hdm")
 install.packages("hdm", repos="http://R-Forge.R-project.org")
 ```
 
-* After installing a package it can be made availabe in the current R seesion with the command
+* After installing a package it can be made available in the current R session with the command
 ```{r, eval=FALSE}
 library(hdm)
 ```

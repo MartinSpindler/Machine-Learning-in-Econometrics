@@ -30,11 +30,12 @@ The goal of this course is to give an introduction to Machine Learning in Econom
   + [Bagging](Lecture_6.html)
   + [Random Forests](Lecture_6.html)
 5. [Neural Nets / Deep Learning](Lecture_7.html)
-6. Support Vector Machines  
-7. Boosting
+6. [Boosting](Lecture_8.html)
   + Basic Idea
   + $L_2$Boosting for Regression
-8. Model Selection: How to choose between different models?
+7. [Support Vector Machines](Lecture_9.html)  
+
+8. [Model Selection: How to choose between different models?]((Lecture_10.html))
 
 Part II. Estimation and Inference of Structural Parameters and Treatment Effects
 

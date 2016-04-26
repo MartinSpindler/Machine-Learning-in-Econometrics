@@ -10,7 +10,7 @@
 
 
 
-  <meta name="date" content="2016-04-07" />
+  <meta name="date" content="2016-04-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,7 +89,7 @@
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2016-04-07</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2016-04-26</p>
           </hgroup>
   </slide>
 
@@ -166,7 +166,7 @@
 
 </article></slide><slide class=''><hgroup><h2>Fitting Neural Networks</h2></hgroup><article  id="fitting-neural-networks-1">
 
-<p>A gradient descent updata at the (r+1)st iteration is given by<br/>* \(\beta_{km}^{(r+1)} = \beta_{km}^{(r)} - \gamma_r \sum_{i=1}^N \frac{\partial R_i}{\partial \beta_{km}^{(r)}}\)<br/>* \(\alpha_{ml}^{(r+1)} = \alpha_{ml}^{(r)} - \gamma_r \sum_{i=1}^N \frac{\partial R_i}{\partial \alpha_{ml}^{(r)}}\)<br/>* \(\gamma_r\) learning rate</p>
+<p>A gradient descent update at the (r+1)st iteration is given by<br/>* \(\beta_{km}^{(r+1)} = \beta_{km}^{(r)} - \gamma_r \sum_{i=1}^N \frac{\partial R_i}{\partial \beta_{km}^{(r)}}\)<br/>* \(\alpha_{ml}^{(r+1)} = \alpha_{ml}^{(r)} - \gamma_r \sum_{i=1}^N \frac{\partial R_i}{\partial \alpha_{ml}^{(r)}}\)<br/>* \(\gamma_r\) learning rate</p>
 
 </article></slide><slide class=''><hgroup><h2>Fitting Neural Networks</h2></hgroup><article  id="fitting-neural-networks-2">
 
@@ -193,9 +193,9 @@
 <ul>
 <li>Starting values: random values near zero. Intuition: model starts out nearly linear and becomes nonlinear as the weights increase.</li>
 <li>Overfitting: to prevent overfitting early stopping and penalization (weight decay; \(R(\theta) + \lambda J(\theta)\))</li>
-<li>Scaling of the inputs: large effects on the quality of the final solution. Default: standarization and normlization of of inputs (mean zero and unit variance)</li>
+<li>Scaling of the inputs: large effects on the quality of the final solution. Default: standardization and normalization of of inputs (mean zero and unit variance)</li>
 <li>Number of hidden units and layers: better to have too many hidden units than too few. (Flexibility + Regularization!)</li>
-<li>Multiple Minima: nonconvex crtierio function with many local minima (different starting values, average of predictions of collection of neural nets)</li>
+<li>Multiple Minima: nonconvex criterion function with many local minima (different starting values, average of predictions of collection of neural nets)</li>
 </ul></article></slide>
 
 

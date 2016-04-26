@@ -10,7 +10,7 @@
 
 
 
-  <meta name="date" content="2016-03-01" />
+  <meta name="date" content="2016-04-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,13 +89,13 @@
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2016-03-01</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2016-04-26</p>
           </hgroup>
   </slide>
 
 <slide class=''><hgroup><h2>Linear Regression</h2></hgroup><article  id="linear-regression">
 
-<p>We start with a linear regression model:\[ y_i = x_i&#39; \beta + \varepsilon_i, i=1, \ldots,n, \]where \(x_i\) is a p-dimensional vector of regressors for observation \(i\), \(\beta\) a p-dimenisional coefficient vector, and \(\varepsilon_i\) iid error terms with \(\mathbb{E} [\varepsilon_i|x_i]= 0\).</p>
+<p>We start with a linear regression model:\[ y_i = x_i&#39; \beta + \varepsilon_i, i=1, \ldots,n, \]where \(x_i\) is a p-dimensional vector of regressors for observation \(i\), \(\beta\) a p-dimensional coefficient vector, and \(\varepsilon_i\) iid error terms with \(\mathbb{E} [\varepsilon_i|x_i]= 0\).</p>
 
 <p>The ordinary least squares (ols) estimator for \(\beta\) is defined as</p>
 
@@ -123,7 +123,7 @@
 
 </article></slide><slide class=''><hgroup><h2>Linear Regression</h2></hgroup><article  id="linear-regression-3">
 
-<p>Unter homoscedastic errors, i.e. \(\mathbb{Var} \varepsilon_i=\sigma^2\), we have that</p>
+<p>Under homoscedastic errors, i.e. \(\mathbb{Var} \varepsilon_i=\sigma^2\), we have that</p>
 
 <p>\[ \mathbb{Var}(\hat{\beta})= (X&#39;X)^{-1} \sigma^2.\]</p>
 
@@ -168,7 +168,7 @@
 
 <ul>
 <li>Estimation by ols</li>
-<li>Quite flexibel, but usually p=3 or p=4</li>
+<li>Quite flexible, but usually p=3 or p=4</li>
 <li>Higher order polynomials (p &gt; 5) might lead to strange fits (overfitting), especially at the boundary.</li>
 </ul>
 
@@ -179,8 +179,8 @@
 </article></slide><slide class=''><hgroup><h2>Extensions </h2><h3> Step Functions</h3></hgroup><article  id="extensions-step-functions">
 
 <ul>
-<li>Defintion: Step functions are functions which are constant on each part of a partition of the domain.</li>
-<li>Univariate Regression: choosing \(K\) cutpoints \(c_1, \ldots, c_K\) and defining new auxiliary variables:<br/>\(C_0(x)= 1(x &lt; c_1)\), \(C_1(x)=1(c_1 \leq x &lt; c_2)\), \(\ldots\), \(C_K(x)=1(c_K \leq x)\)</li>
+<li>Definition: Step functions are functions which are constant on each part of a partition of the domain.</li>
+<li>Univariate Regression: choosing \(K\) cut points \(c_1, \ldots, c_K\) and defining new auxiliary variables:<br/>\(C_0(x)= 1(x &lt; c_1)\), \(C_1(x)=1(c_1 \leq x &lt; c_2)\), \(\ldots\), \(C_K(x)=1(c_K \leq x)\)</li>
 <li>\(1(\cdot)\) is the so-called indicator function which is \(1\) is the condition is true and \(0\) otherwise.</li>
 <li>This gives us the following regression:\[ y_i = \beta_0 = \beta_1 *C_1(x_i) + \ldots + \beta_K *C_K(x_i) + \varepsilon_i \]</li>
 </ul>

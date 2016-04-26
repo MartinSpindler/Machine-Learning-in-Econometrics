@@ -10,7 +10,7 @@
 
 
 
-  <meta name="date" content="2016-03-10" />
+  <meta name="date" content="2016-04-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,7 +89,7 @@
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2016-03-10</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2016-04-26</p>
           </hgroup>
   </slide>
 
@@ -173,7 +173,7 @@
 
 <p>Linear model: \(y_i=\sum_{j=1}^p \beta_j X_i^{(j)} + \varepsilon_i, i=1,\ldots,n\),\(\varepsilon_i,\ldots, \varepsilon_n\) i.i.d., independent of \(\{X_i, i=1,\ldots,n\}\) and \(\mathbb{E} [\varepsilon_i]=0\) and \(\mathbb{V} [\varepsilon_i]=\sigma^2\)</p>
 
-<p>Wlog: intercept is zero and covariates are centred and on the same (unit) scale.</p>
+<p>Wlog: intercept is zero and covariates are centered and on the same (unit) scale.</p>
 
 <p>Now: \(p \gg n\)</p>
 
@@ -183,7 +183,7 @@
 
 <p>The Lasso estimator is given by\[ \hat{\beta}(\lambda)=\arg \min_{\beta \in \mathbb{R}^p} \left(||Y-X\beta||_2^2/n + \lambda ||\beta||_1 \right) (*) \]</p>
 
-<p>\(||Y-X\beta||_2^2=\sum_{i=1}^n (Y_i - (X\beta)_i)^2\), \(|| \beta||_1 = \sum_{j=1}^p |\beta_j|\), \(\lambda \geq 0\) penalisation parameter</p>
+<p>\(||Y-X\beta||_2^2=\sum_{i=1}^n (Y_i - (X\beta)_i)^2\), \(|| \beta||_1 = \sum_{j=1}^p |\beta_j|\), \(\lambda \geq 0\) penalization parameter</p>
 
 </article></slide><slide class=''><hgroup><h2>Lasso Regression</h2></hgroup><article  id="lasso-regression-1">
 

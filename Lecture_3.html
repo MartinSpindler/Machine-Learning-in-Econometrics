@@ -10,7 +10,7 @@
 
 
 
-  <meta name="date" content="2016-02-26" />
+  <meta name="date" content="2016-04-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,7 +89,7 @@
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">2016-02-26</p>
+            <p style="margin-top: 6px; margin-left: -2px;">2016-04-26</p>
           </hgroup>
   </slide>
 
@@ -107,10 +107,10 @@
 
 <ul>
 <li>Polynomial regressions often leads to rough and instable estimates.</li>
-<li>Solution: Fitting seperate low-degree polynomials over different regions (and make them smooth)</li>
+<li>Solution: Fitting separate low-degree polynomials over different regions (and make them smooth)</li>
 <li>Construction of splines:</li>
-<li>Partition x-axis into different smaller sub-intervals and estimate a seperate polynomial for each interval.</li>
-<li>Additionally, it is required that the combined function is smooth (e.g. continuosly differentiable) at the boundary points (knots).</li>
+<li>Partition x-axis into different smaller sub-intervals and estimate a separate polynomial for each interval.</li>
+<li>Additionally, it is required that the combined function is smooth (e.g. continuously differentiable) at the boundary points (knots).</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Regression Splines </h2><h3> Defintion</h3></hgroup><article  id="regression-splines-defintion">
@@ -149,7 +149,7 @@
 <p>How to choose the number and location of knots?</p>
 
 <ul>
-<li>Equi-distant knotes</li>
+<li>Equi-distant knots</li>
 <li>Choice according to quantiles of the x-variable</li>
 </ul>
 
@@ -160,9 +160,9 @@
 </article></slide><slide class=''><hgroup><h2>Natural Splines</h2></hgroup><article  id="natural-splines">
 
 <ul>
-<li>Problem: Regression splines tend to display erratic behvior at the boundaries of the domain leading to high variance.</li>
+<li>Problem: Regression splines tend to display erratic behavior at the boundaries of the domain leading to high variance.</li>
 <li>Solution: additional constraints at the boundary (left of the leftmost knot and right of the most rightmost knot)</li>
-<li>Defintion <strong>Natural Spline</strong><br/>A natural spline of degree \(l\) is a regression spline of degree \(l\) with the additional constraint that<br/>it is a polynomial of degree \((k-1)/2\) on \((-\infty, c_0]\) and \([c_K, + \infty)\).</li>
+<li>Definition <strong>Natural Spline</strong><br/>A natural spline of degree \(l\) is a regression spline of degree \(l\) with the additional constraint that<br/>it is a polynomial of degree \((k-1)/2\) on \((-\infty, c_0]\) and \([c_K, + \infty)\).</li>
 <li>Most popular natural splines are cubic which are linear beyond the boundaries.</li>
 <li>Modifications of the truncated power basis and B-spline basis for natural splines (here dimension \(K\)!)</li>
 </ul>
@@ -172,9 +172,9 @@
 <ul>
 <li>Optimization problem: Among all functions \(f(x)\) with two continuous derivatives, minimize:\[ RSS(f, \lambda) = \sum_{i=1}^n (y_i -f(x_i))^2 + \lambda \int (f&#39;&#39;(t))^2dt \]</li>
 <li>\(\lambda\) is called <em>smoothing parameter</em> (interpretation?)</li>
-<li>It can be shown that the solution of the opimization problem is unique and a natural cubic spline with knots at the unique values of the \(x_i, i=1,\ldots,n\).</li>
+<li>It can be shown that the solution of the optimization problem is unique and a natural cubic spline with knots at the unique values of the \(x_i, i=1,\ldots,n\).</li>
 <li>Here: no problem how to choose the knots (as in the regression spline case)</li>
-<li>Intution: Overparametrization (because of \(n\) knots), but penalization</li>
+<li>Intuition: Overparametrization (because of \(n\) knots), but penalization</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Snoothing Splines</h2></hgroup><article  id="snoothing-splines">

@@ -16,9 +16,9 @@ knitr::opts_chunk$set(error = TRUE)
 * Load the data set *Carseats* from the package *ISLR* and also load the package *tree* which will be used for the exercise.
 * Construct a binary variable *High*, which takes on a value of Yes if the Sales variable exceeds 8, and
 takes on a value of No otherwise. Hint: *ifelse()*
-* Fit a classification tree to predict *High* using all other varibles in the data set. Hint: *tree()*
+* Fit a classification tree to predict *High* using all other variables in the data set. Hint: *tree()*
 * Plot the fitted tree.
-* Determine the "best" tree by pruning / cv and prune to this tree on some  training set. Hint: *cv.tree*
+* Determine the "best" tree by pruning / CV and prune to this tree on some  training set. Hint: *cv.tree*
 * Determine the quality of the predictions on the testing set. Hint: *predict()*
 
 ```{r, include=FALSE}

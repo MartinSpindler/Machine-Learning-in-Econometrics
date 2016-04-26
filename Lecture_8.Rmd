@@ -3,8 +3,8 @@ title: "Lecture 8 -- Boosting"
 author: "Martin Spindler"
 date: '`r format(Sys.Date())`'
 output:
-  beamer_presentation: default
   ioslides_presentation: null
+  beamer_presentation: default
   keep_tex: yes
   mathjax: local
   self_contained: no
