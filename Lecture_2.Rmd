@@ -47,9 +47,9 @@ $$ \hat{\beta} = (X'X)^{-1}X'y.$$
 
 ## Linear Regression
 
-Under homoscedastic errors, i.e. $\mathbb{Var} \varepsilon_i=\sigma^2$, we have that
+Under homoscedastic errors, i.e. $\mathbb{V} \varepsilon_i=\sigma^2$, we have that
 
-$$ \mathbb{Var}(\hat{\beta})= (X'X)^{-1} \sigma^2.$$
+$$ \mathbb{V}(\hat{\beta})= (X'X)^{-1} \sigma^2.$$
 
 Asymptotically, the ols estimate is normal distributed:
 
