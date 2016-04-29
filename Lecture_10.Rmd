@@ -3,8 +3,8 @@ title: "Lecture 10 -- Model Assessment and Selection"
 author: "Martin Spindler"
 date: '`r format(Sys.Date())`'
 output:
-  beamer_presentation: default
   ioslides_presentation: null
+  beamer_presentation: default
   keep_tex: yes
   mathjax: local
   self_contained: no
@@ -16,6 +16,8 @@ output:
 * The test error / generalization error, is the prediction error over an independent test sample
 $$ Err_{\mathcal{T}} = E[L(Y, \hat{f}(X))|\mathcal{T}]$$
 where both $X$ and $Y$ are drawn randomly from their joint distribution (population).
+
+## Bias, Variance, and Model Complexity
 * Expected prediction error (or expected test error)
 $$ Err=E[L(Y,\hat{f}(X))]=E[Err_{\mathcal{T}}]$$
 
@@ -30,6 +32,7 @@ $$ \bar{err} = 1/n \sum_{i=1}^n L(y_i, \hat{f}(x_i)).$$
 * Two different goals:
      + Model selection: estimating the performance of different models in order to choose the best one.
      + Model assessment: having chosen a final model, estimating its prediction error (generalization error) on new data.
+
 
 ## The Bias-Variance Decomposition
 * $Y=f(X) + \varepsilon$ with $E[\varepsilon]=0$ and $Var(\varepsilon)= \sigma^2_{\varepsilon}$
@@ -72,7 +75,7 @@ $$ \omega \equiv E_y(op).$$
 * In sum: $E_y(Err_{in})=E_y(\bar{err})+ 2/n \sum_{i=1}^n Cov(\hat{y}_i, y_i)$
 * Example: linear fit with $p$ variables for model $Y=f(X)+ \varepsilon$: $\sum_{i=1}^n Cov(\hat{y}_i, y_i) = p \sigma^2_{\varepsilon}$
 
-## Estimates of In-Siample Prediction Error
+## Estimates of In-Sample Prediction Error
 * General form of the in-sample estimates: $\hat{Err}_{in}=\bar{err} + \hat{\omega}.$
 * $C_p$ statistic: $C_p= \bar{err} + 2 \frac{d}{n} \hat{\sigma}^2_{\varepsilon}$
 * Akaike Information Criterion: $AIC= - \frac{2}{n} loglik + 2 \frac{d}{n}$

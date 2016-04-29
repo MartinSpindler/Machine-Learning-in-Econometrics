@@ -99,10 +99,15 @@
 <li>Target variable \(Y\), inputs \(X\), \(\hat{f}(X)\) prediction model estimated from training set \(\mathcal{T}\)</li>
 <li>Typical choices of loss functions: \(L(Y,\hat{f}(X))=(Y - \hat{f}(X))^2\) (squared error) or \(L(Y,\hat{f}(X))=|Y - \hat{f}(X)|\) (absolute error)</li>
 <li>The test error / generalization error, is the prediction error over an independent test sample\[ Err_{\mathcal{T}} = E[L(Y, \hat{f}(X))|\mathcal{T}]\]where both \(X\) and \(Y\) are drawn randomly from their joint distribution (population).</li>
-<li>Expected prediction error (or expected test error)\[ Err=E[L(Y,\hat{f}(X))]=E[Err_{\mathcal{T}}]\]</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Bias, Variance, and Model Complexity</h2></hgroup><article  id="bias-variance-and-model-complexity-1">
+
+<ul>
+<li>Expected prediction error (or expected test error)\[ Err=E[L(Y,\hat{f}(X))]=E[Err_{\mathcal{T}}]\]</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Bias, Variance, and Model Complexity</h2></hgroup><article  id="bias-variance-and-model-complexity-2">
 
 <ul>
 <li>Goal: estimation of \(Err_{\mathcal{T}}\)</li>
@@ -110,7 +115,7 @@
 <li>Similar for categorical variables (but different loss function).</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Bias, Variance, and Model Complexity</h2></hgroup><article  id="bias-variance-and-model-complexity-2">
+</article></slide><slide class=''><hgroup><h2>Bias, Variance, and Model Complexity</h2></hgroup><article  id="bias-variance-and-model-complexity-3">
 
 <ul>
 <li>Usually model depends on a tuning parameter \(\alpha\): \(\hat{f}_{\alpha}(x)\)</li>
@@ -169,7 +174,7 @@
 <li>Example: linear fit with \(p\) variables for model \(Y=f(X)+ \varepsilon\): \(\sum_{i=1}^n Cov(\hat{y}_i, y_i) = p \sigma^2_{\varepsilon}\)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Estimates of In-Siample Prediction Error</h2></hgroup><article  id="estimates-of-in-siample-prediction-error">
+</article></slide><slide class=''><hgroup><h2>Estimates of In-Sample Prediction Error</h2></hgroup><article  id="estimates-of-in-sample-prediction-error">
 
 <ul>
 <li>General form of the in-sample estimates: \(\hat{Err}_{in}=\bar{err} + \hat{\omega}.\)</li>

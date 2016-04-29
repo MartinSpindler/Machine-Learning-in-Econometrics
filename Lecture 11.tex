@@ -1,0 +1,479 @@
+\documentclass{beamer}
+
+\usetheme{Warsaw}           
+%\usetheme{Rochester}
+
+\usepackage[latin1]{inputenc}
+%\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+%%% Math symbols 
+\newcommand{\argmax}{\operatornamewithlimits{arg\:max}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\:min}}
+
+%%% other symbols
+\newcommand{\file}[1]{\hbox{\rm\texttt{#1}}}
+\newcommand{\stress}[1]{\textit{#1}} 
+\newcommand{\booktitle}[1]{`#1'} %%'
+
+\newcommand{\bm}[1]{\mbox{\boldmath$#1$}} % bold greek letters in math mode
+\newcommand{\Varepsilon}{\bm{\Large \mbox{$\varepsilon$}}}
+\newcommand{\hats}[1]{#1_{\hat{s}}}
+\newcommand{\hatsm}{\hat{s}_m}
+\newcommand{\gammam}[1]{\bm{\gamma}^{[#1]}}
+\newcommand{\betam}[1]{\bm{\beta}^{[#1]}}
+\newcommand{\mbeta}{{\ensuremath{\boldsymbol{\beta}}}}
+\newcommand{\mgamma}{{\ensuremath{\boldsymbol{\gamma}}}}
+
+\AtBeginSection[]{\frame<beamer>{\frametitle{Overview} \tableofcontents[current]}}
+
+\newcommand{\defin}[1]{\textit{\color{blue}#1}}
+
+% ========== Abk?rzungen ==========
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\author[]{}
+\title[hdm]{Lecture 11 -- High-dimensional Microeconometric Models}
+
+\begin{document}
+\frame{\maketitle}
+
+\begin{frame}
+\tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+\begin{frame}{Motivation}
+\begin{itemize}
+	\item \textbf{Machine Learning}: Methods usually tailored for prediction.
+	\item In \textbf{Economics / Econometrics} both prediction (stock market, demand, ...) but also learning of relations / causal inference is of interest.
+	\item Here: Focus on causal inference.
+	\item Examples for causal inference: What is the effect of a job market programme on future job prospects? What is the effect of a price change?
+	\item General: What is the effect of a certain treatment on a relevant outcome variable
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Motivation}
+\begin{itemize}
+	\item Typical problem in Economics: potential endogeneity of the treatment.
+	\item: Potential source: optimizing behaviour of the individuals with regard to the outcome and unobserved heterogeneity.
+	\item Possible Solutions:
+	\begin{itemize}
+		\item Instrumental Variable (IV) estimation
+		\item Selection of controls
+	\end{itemize}
+	\item Additional challenge: high-dimensional setting with $p$ even larger than $n$
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{High-dimensional Instrumental Variable (IV) Setting}
+
+\begin{frame}{Estimation and Inference with Many Instruments}
+Focus discussion on a simple IV model
+
+\begin{eqnarray}
+y_i &=& d_i \alpha + \varepsilon,\\
+d_i &=& g(z_i) + v_i, \mbox{(first stage)}
+\label{eq:}
+\end{eqnarray}
+with $\begin{pmatrix} \varepsilon_i \\ v_i \end{pmatrix} | z_i \sim \left( 0, \begin{pmatrix}
+	\sigma^2_{\varepsilon} & \sigma_{\varepsilon v} \\ \sigma_{\varepsilon v} &	\sigma^2_{v}
+\end{pmatrix}\right)$
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item can have additional low-dimensional controls $w_i$ entering both
+equations -- assume these have been partialled out; also can
+have multiple endogenous variables; see references for details
+\item the main target is $\alpha$, and $g$ is the unspecified regression function
+= ?optimal instrument?
+\item We have either
+\begin{itemize}
+	\item  Many instruments. $x_i = z_i$ , or
+	\item Many technical instruments. $x_i = P(z_i)$, e.g. polynomials,
+trigonometric terms.
+\end{itemize} 
+\item where where the number of instruments $p$ is large, possibly much larger than $n$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Inference in the IV Model}
+	\begin{itemize}
+		\item Assume approximate sparsity:
+		\[ g(z_i) = E[d_i|z_i]= \underbrace{x_i'\beta_0}_{\text{sparse approximation}} + \underbrace{r_i}_{\text{approx error}} \]
+		
+		that is, optimal instrument is approximated by s (unknown) instruments, such that
+		\[ s:= ||\beta_0||_0 \ll n, \sqrt{1/n \sum_{i=1}^n r_i^2} \leq \sigma_v \sqrt{\frac{s}{n}} \]
+		\item We shall find these "effective" instruments amongst $x_i$ by Lasso and estimate the optimal instrument by Post-Lasso, $\hat{g}(z_i)=x_i' \hat{\beta}_{PL}$.
+		\item Estimate $\alpha$ using the estimated optimal instrument via 2SLS
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Instrument Selection in Angrist Krueger Data}
+	\begin{itemize}
+		\item $y_i =$ wage
+\item $d_i$ = education (endogenous)
+\item $\alpha$ = returns to schooling
+\item $z_i=$ quarter of birth and controls (50 state of birth dummies and 7
+year of birth dummies)
+\item $x_i = P(z_i)$, includes $z_i$ and all interactions
+\item a very large list, $p = 1530$
+	\end{itemize}
+	Using few instruments (3 quarters of birth) or many instruments
+(1530) gives big standard errors. So it seems a good idea to use
+instrument selection to see if can improve.
+\end{frame}
+
+\begin{frame}{AK Example}
+	
+	\begin{tabular}{lccc}
+	\hline \hline
+	Estimator & Instruments & Schooling Coef & Rob Std Error\\ \hline
+2SLS &(3 IVs) 3 &.10 &.020\\ \hline
+2SLS &(All IVs) 1530& .10& .042\\ \hline
+2SLS &(LASSO IVs) 12& .10& .014\\ \hline \hline
+	\end{tabular}
+	
+	Notes:
+	\begin{itemize}
+		\item About 12 constructed instruments contain nearly all information.
+\item Fuller's form of 2SLS is used due to robustness.
+\item The Lasso selection of instruments and standard errors are fully
+justified theoretically below
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{2SLS with Post-LASSO estimated Optimal IV}
+	2SLS with Post-LASSO estimated Optimal IV
+	\begin{itemize}
+		\item In step one, estimate optimal instrument $\hat{g}(z_i) = x_i' \hat{\beta} $using
+Post-LASSO estimator.
+\item In step two, compute the 2SLS using optimal instrument as IV,
+\[ \hat{\alpha}= \left[ 1/n \sum_{i=1}^n (d_i\hat{g}(z_i)') \right]^{-1} 1/n \sum_{i=1}^n [\hat{g}(z_i)y_i] \]
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{IV Selection: Theoretical Justification}
+Theorem (2SLS with LASSO-selected IV)
+
+Under practical regularity conditions, if the optimal instrument is
+sufficient sparse, namely $s^2 \log^2 p = o(n)$, and is strong, namely
+$|E[d_i g(z_i)]|$ is bounded away from zero, we have that
+\[ \sigma_n^{-1} \sqrt{n} (\hat{\alpha}-\alpha) \rightarrow_d N(0,1) \] 
+where $\sigma^2_n$ is the standard White?s robust formula for the variance of
+2SLS. The estimator is semi-parametrically efficient under
+homoscedasticity.
+
+\begin{itemize}
+{\tiny
+\item Ref: Belloni, Chen, Chernozhukov, and Hansen (Econometrica, 2012)
+for a general statement.
+\item A weak-instrument robust procedure is also available: the sup-score
+test
+\item Key point: "Selection mistakes" are asymptotically negligible due to
+"low-bias" property of the estimating equations, which we shall discuss
+later.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example of IV: Eminent Domain}
+	
+	Estimate economic consequences of government take-over of
+property rights from individuals
+\begin{itemize}
+\item $y_i$ = economic outcome in a region i, e.g. housing price index
+\item $d_i$ = indicator of a property take-over decided in a court of law,
+by panels of 3 judges
+\item $x_i$ = demographic characteristics of judges, that are randomly
+assigned to panels: education, political affiliations, age,
+experience etc.
+\item $f_i = x_i$ + various interactions of components of $x_i$ ,
+\item a very large list $p = p(f_i) = 344$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example continued}
+	\begin{itemize}
+		\item Outcome is log of housing price index; endogenous variable is
+government take-over
+\item Can use 2 elementary instruments, suggested by real lawyers
+(Chen and Yeh, 2010)
+\item Can use all 344 instruments and select approximately the right
+set using LASSO.
+	\end{itemize}
+	
+	\begin{tabular}{lccc}
+	\hline \hline
+	Estimator &Instruments &Price Effect &Rob Std Error\\ \hline
+2SLS &2& .07& .032\\ \hline
+2SLS / LASSO IVs& 4& .05 &.017\\ \hline \hline
+	\end{tabular}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Treatment Effects in a Partially Linear Model}
+
+\begin{frame}
+	Example: (Exogenous) Cross-Country Growth Regression.
+	\begin{itemize}
+\item Relation between growth rate and initial per capita GDP,
+conditional on covariates, describing institutions and
+technological factors:
+
+\[ \underbrace{\text{GrowRate}}_{y_i} = \beta_0 + \underbrace{\alpha}_{\text{ATE}} \underbrace{\log (\text{GDP})}_{d_i} + \sum_{j=1}^p \beta_j x_{ij} + \varepsilon_i \] 
+where the model is exogenous,
+ \[ E[\varepsilon_i| d_i, x_i] = 0. \]
+\item Test the convergence hypothesis -- $\alpha < 0$ -- poor countries catch
+up with richer countries, conditional on similar institutions etc.
+Prediction from the classical Solow growth model.
+\item In Barro-Lee data, we have p = 60 covariates, n = 90
+observations. Need to do selection.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{How to perform selection?}
+	\begin{itemize}
+		\item  (Don't do it!) Naive/Textbook selection
+		\begin{enumerate}
+\item Drop all $x_{ij}$s that have small coefficients, using model selection
+devices (classical such as t-tests or modern)
+\item Run OLS of yi on di and selected regressors.
+\end{enumerate}
+
+Does not work because fails to control omitted variable bias.
+(Leeb and P\"otscher, 2009).
+\item We propose Double Selection approach:
+\begin{enumerate}
+\item Select controls $x_{ij}$s that predict $y_i$ .
+\item Select controls $x_{ij}$s that predict $d_i$ .
+\item Run OLS of $y_i$ on $d_i$ and the union of controls selected in steps 1
+and 2.
+\end{enumerate}
+\item The additional selection step controls the omitted variable bias.
+\item We find that the coefficient on lagged GDP is negative, and the
+confidence intervals exclude zero.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{tabular}{lcc}
+\hline \hline
+Method &effect &Std. Err.\\ \hline
+Barro-Lee (Economic Reasoning) &$-0.02$& $0.005$\\ \hline
+All Controls ($n = 90$, $p = 60$)& $-0.02$& $0.031$\\ \hline
+Post-Naive Selection &$-0.01$ &$0.004$\\ \hline
+Post-Double-Selection &$-0.03$ &$0.011$\\ \hline \hline
+\end{tabular}
+
+\begin{itemize}
+	\item Double-Selection finds 8 controls, including trade-openness and
+several education variables.
+\item Our findings support the conclusions reached in Barro and Lee
+and Barro and Sala-i-Martin.
+\item Using all controls is very imprecise.
+\item Using naive selection gives a biased estimate for the speed of
+convergence.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{TE in a PLM}
+Partially linear regression model (exogenous)
+\[ y_i = d_i \alpha_0 + g(z_i) + \xi_i,  E[\xi_i|z_i, d_i ] = 0, \]
+\begin{itemize}
+\item $y_i$ is the outcome variable
+\item $d_i$ is the policy/treatment variable whose impact is $\alpha_0$
+\item $z_i$ represents confounding factors on which we need to condition
+\end{itemize}
+For us the auxilliary equation will be important:
+\[ d_i = m(z_i) + v_i, E[v_i | z_i ] = 0 \]
+\begin{itemize}
+	\item $m$ summarizes the counfounding effect and creates omitted
+variable biases.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{TE in a PLM}
+Use many control terms $x_i = P(z_i) \in \mathbb{R}^p$ to approximate $g$ and $m$
+\[ y_i = d_i\alpha_0 + \x_i' \beta_{g0} + r_{gi} + \xi_i, d_i=x_i' \beta_{m0} + r_{mi} + v_i\]
+\begin{itemize}
+\item Many controls. $x_i = z_i$ .
+\item Many technical controls. $x_i = P(z_i)$, e.g. polynomials,
+trigonometric terms.
+\end{itemize}
+Key assumption: g and m are approximately sparse
+\end{frame}
+
+\begin{frame}
+\[	y_i = d_i \alpha_0 + x_i' \beta_{g0} + r_i + \xi_i,  E[\xi_i| z_i, d_i ] = 0, \]
+Naive/Textbook Inference:
+\begin{enumerate}
+\item Select controls terms by running Lasso (or variants) of $y_i$ on $d_i$
+and $x_i$
+\item Estimate $\alpha_0$ by least squares of $y_i$ on $d_i$ and selected controls,
+apply standard inference
+\end{enumerate}
+However, this naive approach has caveats:
+\begin{itemize}
+\item Relies on perfect model selection and exact sparsity. Extremely
+unrealistic.
+\item Easily and badly breaks down both theoretically (Leeb and
+P\"otscher, 2009) and practically.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{(Post) Double Selection Method}
+To define the method, write the reduced form (substitute out $d_i$)
+\begin{eqnarray}
+y_i &=& x_i' \bar{\beta}_0 + \bar{r}_i + \bar{\xi_i},\\
+d_i &=&  x_i' \beta_{m0} + r_{mi} + v_i, 
+\end{eqnarray}
+
+\begin{enumerate}
+\item (Direct) Let $\hat{I}_1$ be controls selected by Lasso of $y_i$ on $x_i$ .
+\item (Indirect) Let $\hat{I}_1$ be controls selected by Lasso of $d_i$ on $x_i$ .
+\item (Final) Run least squares of $y_i$ on $d_i$ and union of selected controls:
+\end{enumerate}
+\[ (\tilde{\alpha}, \tilde{\beta}) = \argmin_{\alpha, \beta} \left\{ 1/n \sum_{i=1}^n [(y_i - d_i \alpha - x_i' \beta)^2]: \beta_j=0, \forall j \notin \hat{I}=\hat{I}_1 \cup \hat{2}_1  \right\}. \] 
+
+The post-double-selection estimator.
+\begin{itemize}
+	\item Belloni, Chernozhukov, Hansen (World Congress, 2010)
+	\item Belloni, Chernozhukov, Hansen (ReStud, 2013)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Intuition}
+	\begin{itemize}
+		\item The double selection method is robust to moderate selection
+mistakes.
+\item The Indirect Lasso step -- the selection among the controls $x_i$
+that predict $d_i$ -- creates this robustness. It finds controls whose
+omission would lead to a "large" omitted variable bias, and
+includes them in the regression.
+\item In essence the procedure is a selection version of Frisch-Waugh
+procedure for estimating linear regression.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{More Intuition}
+	\small
+	Think about omitted variables bias in case with one treatment (d) and one
+regressor (x):
+\[ y_i = \alpha d_i + \beta x_i + \xi_i,  d_i = x_i + v_i \]
+If we drop $x_i$ , the short regression of $y_i$ on $d_i$ gives
+\[ \sqrt{n} (\hat{\alpha} - \alpha) = \text{good term} + \sqrt{n} (D'D/n)^{-1}(X'X/n) (\gamma \beta).\]
+\begin{itemize}
+\item the good term is asymptotically normal, and we want
+$ \sqrt{n} \gamma \beta \rightarrow 0.$
+\item naive selection drops $x_i$ if $\beta= O(\sqrt{\log n/n})$, but
+$ \sqrt{n} \gamma \sqrt{\log n /n} \rightarrow \infty $
+\item double selection drops $x_i$ only if both $\beta= O(\sqrt{\log n/n})$ and $\gamma= O(\sqrt{\log n/n})$, that is, if
+\[ \sqrt{n} \gamma \beta = O((\log n)/\sqrt{n}) \rightarrow 0. \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Main Result}
+Theorem (Inference on a Coefficient in Regression)
+
+Uniformly within a rich class of models, in which g and m admit a
+sparse approximation with $s^2 \log^2(p \vee n)/n \rightarrow 0$ and other practical
+conditions holding,
+\[ \sigma_n^{-1} \sqrt{n} (\hat{\alpha}-\alpha_0) \rightarrow_d N(0,1) \]
+$\sigma_n^{-1}$ is Robinson's formula for variance of LS in a partially linear
+model. Under homoscedasticity, semi-parametrically efficient.
+
+Model selection mistakes are asymptotically negligible due to
+double selection.
+\end{frame}
+
+\begin{frame}{Example: Effect of Abortion on Murder Rates}
+Estimate the consequences of abortion rates on crime, Donohue and
+Levitt (2001)
+\[ y_{it} = \alpha d_{it} + x_{it} + \xi_{it} \]
+\begin{itemize}
+\item $y_{it} =$ change in crime-rate in state i between t and t - 1,
+\item $d_{it} =$ change in the (lagged) abortion rate,
+\item $x_{it} =$ controls for time-varying confounding state-level factors,
+including initial conditions and interactions of all these variables
+with trend and trend-squared
+\item p = 251, n = 576
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example continued}
+Double selection: 8 controls selected, including initial conditions
+and trends interacted with initial conditions
+
+\begin{tabular}{lcc}
+\hline \hline
+Estimator &Effect& Std. Err.\\ \hline
+DS &$-0.204$& $0.068$\\ \hline
+Post-Single Selection& $- 0.202$& $0.051$\\ \hline
+Post-Double-Selection& $-0.166$ &$0.216$\\ \hline \hline
+\end{tabular}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Heterogenous Treatment Effects}
+
+\begin{frame}{Heterogenous Treatment Effects}
+\small
+\begin{itemize}
+\item Here $d_i$ is binary, indicating the receipt of the treatment,
+\item Drop partially linear structure; instead assume $d_i$ is fully
+interacted with all other control variables:
+\[ y_i = d_i g(1, z_i) + (1 - d_i )g(0, z_i ) + \xi_i,  E[\xi_i| d_i, z_i ] = 0 \]
+\[ d_i = m(z_i) + u_i, E[u_i| z_i] = 0  \text{(as before)} \]
+\item Target parameter. Average Treatment Effect:
+\[ \alpha_0 = E[g(1, z_i) - g(0, z_i)] \]
+\item Example. $d_i=$ 401(k) eligibility, $z_i=$ characteristics of the
+worker/firm, $y_i=$ net savings or total wealth, $\alpha_0 =$ the average
+impact of 401(k) eligibility on savings.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Heterogenous Treatment Effects}
+\small
+	An appropriate $M_i$ is given by Hahn's (1998) efficient score
+\[ M_i(\alpha, g, m) = \left( \frac{d_i(y_i-g(1,z_i))}{m(z_i)} - \frac{(1-d_i)(y_i-g(0,z_i))}{1-m(z_i)}+ g(1,z_i) - g(0,z_i) \right) - \alpha \]
+which is "immunized" against perturbations in $g_0$ and $m_0$:
+\[ \frac{\partial}{\partial g} E[M_i (\alpha_0, g, m_0)]|_{g=g_0} = 0, 
+\frac{\partial}{\partial m} E[M_i (\alpha_0, g_0, m)]|_{m=m_0} = 0. \]
+Hence the post-double selection estimator for $\alpha$ is given by
+\[ \tilde{\alpha} = 1/N \sum_{i=1}^N \left( \frac{d_i(y_i-\hat{g}(1,z_i))}{\hat{m}(z_i)} - \frac{(1-\hat{d}_i)(y_i-\hat{g}(0,z_i))}{1-\hat{m}(z_i)}+ \hat{g}(1,z_i) - \hat{g}(0,z_i) \right)\]
+where we estimate g and m via post- selection (Post-Lasso)
+methods.
+\end{frame}
+
+\begin{frame}{Heterogenous Treatment Effects}
+\small
+Theorem (Inference on ATE)
+
+Uniformly within a rich class of models, in which g and m admit a
+sparse approximation with $s^2 \log^2(p \vee n)/n \rightarrow 0$ and other practical
+conditions holding,
+\[ \sigma_n^{-1} \sqrt{n} (\tilde{\alpha} - \alpha_0) \rightarrow_d N(0,1) \]
+where $\sigma^{-1}_n = E[M^2_i (\alpha_0, g_0, m_0)].$
+Moreover, $\tilde{\alpha}$ is semi-parametrically efficient for $\alpha_0$.
+\begin{itemize}
+\item Model selection mistakes are asymptotically negligible due to the
+use of "immunizing" moment equations.
+\item Ref. Belloni, Chernozhukov, Hansen, Inference on TE after selection amongst
+high-dimensional controls (Restud, 2013).
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
